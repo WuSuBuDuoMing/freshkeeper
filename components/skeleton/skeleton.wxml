@@ -1,0 +1,21 @@
+<view class="skeleton">
+  <view class="sk-circle" wx:if="{{showTitle}}" style="width:{{circleSize}}rpx;height:{{circleSize}}rpx;"></view>
+  <view class="sk-line sk-title" wx:if="{{showTitle}}" style="width:{{titleWidth}}%;"></view>
+  <view class="sk-line" wx:for="{{lines}}" wx:key="index" style="width:{{60 + index * 5}}%;"></view>
+  <view wx:if="{{type === 'card'}}" class="sk-card">
+    <view class="sk-circle" style="width:72rpx;height:72rpx;"></view>
+    <view class="sk-card-lines"><view class="sk-line" style="width:60%;"></view><view class="sk-line" style="width:80%;"></view></view>
+  </view>
+  <view wx:if="{{type === 'list'}}" class="sk-list">
+    <view class="sk-list-item" wx:for="{{listCount}}" wx:key="index">
+      <view class="sk-circle" style="width:64rpx;height:64rpx;"></view>
+      <view><view class="sk-line" style="width:{{50 + index * 4}}%;"></view><view class="sk-line" style="width:{{30 + index * 6}}%;"></view></view>
+    </view>
+  </view>
+  <view wx:if="{{type === 'stats'}}" class="sk-grid">
+    <view class="sk-grid-item" wx:for="{{4}}" wx:key="index">
+      <view class="sk-circle" style="width:48rpx;height:48rpx;"></view>
+      <view class="sk-line" style="width:60%;margin-top:12rpx;"></view>
+    </view>
+  </view>
+</view>

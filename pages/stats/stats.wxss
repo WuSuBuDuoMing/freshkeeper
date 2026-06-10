@@ -1,0 +1,43 @@
+.report-grid { display: flex; flex-wrap: wrap; gap: 16rpx; }
+.report-grid stat-card { width: calc(50% - 8rpx); }
+
+.category-chart { background: var(--bg-card, #fff); border-radius: 16rpx; padding: 24rpx; }
+.chart-bar { margin-bottom: 16rpx; }
+.bar-label { display: flex; justify-content: space-between; margin-bottom: 6rpx; }
+.bar-name { font-size: 26rpx; color: var(--text-primary, #1a1a1a); }
+.bar-value { font-size: 24rpx; color: var(--text-secondary, #666); }
+.bar-track { height: 16rpx; background: var(--bg-input, #f5f5f5); border-radius: 8rpx; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 8rpx; transition: width 0.5s ease; }
+
+.waste-summary { display: flex; justify-content: space-around; padding: 24rpx 0; border-bottom: 1rpx solid var(--border-color, #eee); }
+.waste-item { display: flex; flex-direction: column; align-items: center; }
+.waste-value { font-size: 36rpx; font-weight: 700; }
+.waste-value.danger { color: #F44336; }
+.waste-value.warning { color: #FF9800; }
+.waste-value.success { color: #4CAF50; }
+.waste-label { font-size: 24rpx; color: var(--text-hint, #999); margin-top: 4rpx; }
+.waste-list { padding: 20rpx 0; }
+.waste-list-title { font-size: 26rpx; color: var(--text-secondary, #666); margin-bottom: 12rpx; display: block; }
+.waste-food-item { display: flex; justify-content: space-between; padding: 8rpx 0; }
+.waste-food-name { font-size: 26rpx; color: var(--text-primary, #1a1a1a); }
+.waste-food-count { font-size: 26rpx; color: var(--text-hint, #999); }
+
+.purchase-item { display: flex; align-items: center; gap: 16rpx; padding: 16rpx 0; border-bottom: 1rpx solid var(--border-color, #eee); }
+.purchase-item:last-child { border-bottom: none; }
+.purchase-rank {
+  width: 40rpx; height: 40rpx; display: flex; align-items: center; justify-content: center;
+  border-radius: 50%; background: var(--bg-input, #f5f5f5); font-size: 24rpx;
+  color: var(--text-secondary, #666); font-weight: 600;
+}
+.purchase-rank.top3 { background: rgba(255,152,0,0.1); color: #FF9800; }
+.purchase-info { flex: 1; }
+.purchase-name { font-size: 28rpx; color: var(--text-primary, #1a1a1a); }
+.purchase-meta { font-size: 24rpx; color: var(--text-hint, #999); display: block; margin-top: 2rpx; }
+
+.tips-list { display: flex; flex-direction: column; gap: 12rpx; }
+.tip-card { padding: 20rpx; }
+.tip-header { display: flex; align-items: center; gap: 12rpx; margin-bottom: 8rpx; }
+.tip-icon { font-size: 28rpx; }
+.tip-title { flex: 1; font-size: 28rpx; font-weight: 600; color: var(--text-primary, #1a1a1a); }
+.tip-saving { font-size: 26rpx; color: var(--color-primary, #4CAF50); font-weight: 600; }
+.tip-desc { font-size: 24rpx; color: var(--text-secondary, #666); line-height: 1.5; }

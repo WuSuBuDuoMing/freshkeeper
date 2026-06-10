@@ -1,0 +1,38 @@
+<!--
+  家庭成员组件
+  展示成员头像、名称、角色和最近活动
+-->
+<view class="family-member" wx:if="{{member && member.name}}">
+  <!-- 头像区域 -->
+  <view class="member-avatar">
+    <text class="avatar-emoji">{{member.avatar || '👤'}}</text>
+  </view>
+
+  <!-- 信息区域 -->
+  <view class="member-info">
+    <view class="member-top">
+      <text class="member-name">{{member.name}}</text>
+      <view
+        class="role-tag"
+        style="background: {{roleMap[member.role].color || '#999999'}}"
+      >
+        <text class="role-text">{{roleMap[member.role].text || '成员'}}</text>
+      </view>
+    </view>
+
+    <!-- 最近活动 -->
+    <view class="member-activity" wx:if="{{showActivity && recentActivity}}">
+      <text class="activity-text">
+        {{recentActivity.action}} {{recentActivity.target}}
+      </text>
+      <text class="activity-time">{{recentActivity.time}}</text>
+    </view>
+  </view>
+
+  <!-- 操作按钮区域 -->
+  <view class="member-actions" wx:if="{{showActions && member.role !== 'owner'}}">
+    <view class="action-btn action-btn--remove" bindtap="handleRemove">
+      <text class="action-icon">×</text>
+    </view>
+  </view>
+</view>

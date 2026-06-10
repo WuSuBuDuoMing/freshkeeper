@@ -1,0 +1,6 @@
+{
+  "component": true,
+  "usingComponents": {
+    "loading-state": "../loading-state/loading-state"
+  }
+}

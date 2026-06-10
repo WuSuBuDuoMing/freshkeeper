@@ -1,0 +1,89 @@
+<view class="container">
+  <loading-state wx:if="{{loading}}" />
+
+  <view wx:if="{{!loading}}">
+    <!-- 月度报告 -->
+    <view class="section">
+      <text class="section-title">📊 月度报告</text>
+      <view class="report-grid">
+        <stat-card title="食材总数" value="{{monthlyReport.totalFoods}}" icon="🥬" />
+        <stat-card title="浪费率" value="{{monthlyReport.wasteRate}}" icon="📉" color="#F44336" bgColor="rgba(244,67,54,0.08)" />
+        <stat-card title="节省金额" value="¥{{monthlyReport.totalSaved}}" icon="💰" color="#4CAF50" bgColor="rgba(76,175,80,0.08)" />
+        <stat-card title="做饭次数" value="{{monthlyReport.mealsCooked}}" icon="🍳" color="#FF9800" bgColor="rgba(255,152,0,0.08)" />
+      </view>
+    </view>
+
+    <!-- 分类占比 -->
+    <view class="section">
+      <text class="section-title">🥬 食材分类占比</text>
+      <view class="category-chart">
+        <view class="chart-bar" wx:for="{{categoryDistribution}}" wx:key="name">
+          <view class="bar-label">
+            <text class="bar-name">{{item.name}}</text>
+            <text class="bar-value">{{item.value}}</text>
+          </view>
+          <view class="bar-track">
+            <view class="bar-fill" style="width: {{item.value / 12 * 100}}%; background: {{item.color}};"></view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 浪费统计 -->
+    <view class="section">
+      <text class="section-title">🗑️ 浪费统计</text>
+      <view class="card">
+        <view class="waste-summary">
+          <view class="waste-item">
+            <text class="waste-value danger">{{wasteStats.totalWasted}}</text>
+            <text class="waste-label">浪费数量</text>
+          </view>
+          <view class="waste-item">
+            <text class="waste-value warning">¥{{wasteStats.wastedValue}}</text>
+            <text class="waste-label">浪费金额</text>
+          </view>
+          <view class="waste-item">
+            <text class="waste-value success">¥{{wasteStats.savedMoney}}</text>
+            <text class="waste-label">已节省</text>
+          </view>
+        </view>
+        <view class="waste-list">
+          <text class="waste-list-title">最常浪费食材</text>
+          <view class="waste-food-item" wx:for="{{wasteStats.topWasted}}" wx:key="name">
+            <text class="waste-food-name">{{item.name}}</text>
+            <text class="waste-food-count">{{item.count}}次</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 最常购买 -->
+    <view class="section">
+      <text class="section-title">🛒 最常购买食材</text>
+      <view class="card">
+        <view class="purchase-item" wx:for="{{mostPurchased}}" wx:key="name">
+          <view class="purchase-rank {{index < 3 ? 'top3' : ''}}">{{index + 1}}</view>
+          <view class="purchase-info">
+            <text class="purchase-name">{{item.name}}</text>
+            <text class="purchase-meta">购买{{item.count}}次 · 共¥{{item.totalCost}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 省钱建议 -->
+    <view class="section">
+      <text class="section-title">💡 省钱建议</text>
+      <view class="tips-list">
+        <view class="tip-card card" wx:for="{{savingTips}}" wx:key="title">
+          <view class="tip-header">
+            <text class="tip-icon">{{item.icon}}</text>
+            <text class="tip-title">{{item.title}}</text>
+            <text class="tip-saving">可省 ¥{{item.saving}}</text>
+          </view>
+          <text class="tip-desc">{{item.description}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

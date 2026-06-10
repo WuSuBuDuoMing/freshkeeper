@@ -1,0 +1,6 @@
+<view class="toast-mask" wx:if="{{visible}}" catchtouchmove="">
+  <view class="toast-content toast-{{type}}">
+    <text class="toast-icon" wx:if="{{icon}}">{{icon}}</text>
+    <text class="toast-message">{{message}}</text>
+  </view>
+</view>

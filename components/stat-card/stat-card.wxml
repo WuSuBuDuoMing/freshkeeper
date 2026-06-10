@@ -1,0 +1,12 @@
+<view class="stat-card">
+  <view class="stat-icon" style="background: {{bgColor}};">
+    <text>{{icon}}</text>
+  </view>
+  <view class="stat-content">
+    <view class="stat-value-row">
+      <text class="stat-value" style="color: {{color}};">{{value}}</text>
+      <text class="stat-unit" wx:if="{{unit}}">{{unit}}</text>
+    </view>
+    <text class="stat-title">{{title}}</text>
+  </view>
+</view>

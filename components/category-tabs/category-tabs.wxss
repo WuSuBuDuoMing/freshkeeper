@@ -1,0 +1,14 @@
+.tabs-scroll { white-space: nowrap; padding: 0 0 16rpx 0; }
+.tabs-container { display: inline-flex; gap: 16rpx; padding: 0 8rpx; }
+.tab-item {
+  display: inline-flex; flex-direction: column; align-items: center;
+  padding: 16rpx 24rpx; border-radius: 16rpx;
+  background: var(--bg-card, #fff); min-width: 120rpx;
+  transition: all 0.2s;
+}
+.tab-item.active {
+  background: rgba(76, 175, 80, 0.12); border: 2rpx solid #4CAF50;
+}
+.tab-icon { font-size: 32rpx; margin-bottom: 4rpx; }
+.tab-name { font-size: 22rpx; color: var(--text-secondary, #666); }
+.tab-item.active .tab-name { color: #4CAF50; font-weight: 600; }

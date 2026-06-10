@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "采购清单",
+  "usingComponents": {
+    "shopping-item": "/components/shopping-item/shopping-item",
+    "empty-state": "/components/empty-state/empty-state",
+    "loading-state": "/components/loading-state/loading-state"
+  }
+}

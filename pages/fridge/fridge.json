@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "我的冰箱",
+  "usingComponents": {
+    "food-card": "/components/food-card/food-card",
+    "category-tabs": "/components/category-tabs/category-tabs",
+    "empty-state": "/components/empty-state/empty-state",
+    "loading-state": "/components/loading-state/loading-state"
+  }
+}

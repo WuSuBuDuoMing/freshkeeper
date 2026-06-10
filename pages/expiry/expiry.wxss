@@ -1,0 +1,10 @@
+.expiry-section { margin-bottom: 32rpx; }
+.section-header { display: flex; align-items: center; gap: 12rpx; margin-bottom: 16rpx; }
+.section-icon { font-size: 32rpx; }
+.section-title { font-size: 32rpx; font-weight: 600; color: var(--text-primary, #1a1a1a); }
+.section-count {
+  font-size: 24rpx; padding: 4rpx 12rpx; border-radius: 999rpx;
+  background: rgba(76,175,80,0.1); color: #4CAF50; font-weight: 600;
+}
+.section-count.warning { background: rgba(255,152,0,0.1); color: #FF9800; }
+.section-count.danger { background: rgba(244,67,54,0.1); color: #F44336; }

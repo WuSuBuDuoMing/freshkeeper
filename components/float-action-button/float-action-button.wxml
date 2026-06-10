@@ -1,0 +1,14 @@
+<view class="fab-container" style="left:{{x}}rpx;top:{{y}}rpx;">
+  <view class="fab-actions" wx:if="{{expanded}}">
+    <view class="fab-action-item" wx:for="{{actions}}" wx:key="label"
+      data-index="{{index}}" bindtap="onActionTap"
+      style="animation-delay:{{index * 60}}ms;">
+      <text class="fab-action-icon">{{item.icon}}</text>
+      <text class="fab-action-label">{{item.label}}</text>
+    </view>
+  </view>
+  <view class="fab-btn {{expanded ? 'expanded' : ''}}"
+    bindtouchstart="onTouchStart" bindtouchmove="onTouchMove" bindtap="onTap">
+    <text class="fab-icon">{{expanded ? '✕' : '＋'}}</text>
+  </view>
+</view>

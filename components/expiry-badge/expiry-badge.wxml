@@ -1,0 +1,3 @@
+<view class="expiry-badge {{colorClass}}">
+  <text>{{text}}</text>
+</view>

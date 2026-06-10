@@ -1,0 +1,11 @@
+.skeleton { width: 100%; }
+.sk-circle { border-radius: 50%; background: #e8e8e8; animation: shimmer 1.5s infinite linear; }
+.sk-line { height: 28rpx; border-radius: 8rpx; background: #e8e8e8; margin-bottom: 16rpx; animation: shimmer 1.5s infinite linear; }
+.sk-title { height: 36rpx; }
+.sk-card { display: flex; gap: 20rpx; align-items: center; background: #fff; border-radius: 16rpx; padding: 24rpx; margin-top: 16rpx; }
+.sk-card-lines { flex: 1; }
+.sk-list { display: flex; flex-direction: column; gap: 20rpx; margin-top: 16rpx; }
+.sk-list-item { display: flex; gap: 16rpx; align-items: center; }
+.sk-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16rpx; margin-top: 16rpx; }
+.sk-grid-item { display: flex; flex-direction: column; align-items: center; background: #fff; border-radius: 16rpx; padding: 24rpx; }
+@keyframes shimmer { 0%{opacity:1} 50%{opacity:0.4} 100%{opacity:1} }

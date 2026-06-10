@@ -1,0 +1,73 @@
+<view class="container">
+  <loading-state wx:if="{{loading}}" />
+
+  <view wx:if="{{!loading}}">
+    <!-- 顶部汇总 -->
+    <view class="summary-bar card">
+      <view class="summary-item">
+        <text class="summary-value">{{pendingItems.length}}</text>
+        <text class="summary-label">待购买</text>
+      </view>
+      <view class="summary-divider"></view>
+      <view class="summary-item">
+        <text class="summary-value">¥{{totalEstimate}}</text>
+        <text class="summary-label">预计花费</text>
+      </view>
+      <view class="summary-divider"></view>
+      <view class="summary-item">
+        <text class="summary-value">{{purchasedCount}}</text>
+        <text class="summary-label">已购买</text>
+      </view>
+    </view>
+
+    <!-- Tab 切换 -->
+    <view class="tab-bar">
+      <view class="tab {{activeTab === 'pending' ? 'active' : ''}}" data-tab="pending" bindtap="onToggleTab">
+        <text>待购买 ({{pendingItems.length}})</text>
+      </view>
+      <view class="tab {{activeTab === 'purchased' ? 'active' : ''}}" data-tab="purchased" bindtap="onToggleTab">
+        <text>已购买 ({{purchasedCount}})</text>
+      </view>
+    </view>
+
+    <!-- 待购买列表 -->
+    <view wx:if="{{activeTab === 'pending'}}">
+      <!-- 添加按钮 -->
+      <view class="add-form-btn" bindtap="onToggleAddForm">
+        <text class="add-icon">＋</text>
+        <text>添加采购项</text>
+      </view>
+
+      <!-- 添加表单 -->
+      <view class="add-form card" wx:if="{{showAddForm}}">
+        <input class="form-input" placeholder="物品名称" value="{{newItem.name}}" bindinput="onNewItemInput" />
+        <view class="form-row">
+          <input class="form-input-small" type="number" placeholder="数量" value="{{newItem.quantity}}" bindinput="onNewItemQuantityChange" />
+          <picker mode="selector" range="{{categories}}" range-key="name" bindchange="onNewItemCategoryChange">
+            <view class="form-input-small">{{newItem.category}}</view>
+          </picker>
+          <button class="btn-primary btn-sm" bindtap="onAddItem">添加</button>
+        </view>
+      </view>
+
+      <!-- 按分类分组 -->
+      <view wx:for="{{groupedPending}}" wx:for-index="cat" wx:for-item="items" wx:key="cat" class="group-section">
+        <text class="group-title">{{cat}} ({{items.length}})</text>
+        <shopping-item wx:for="{{items}}" wx:for-item="item" wx:key="id" item="{{item}}"
+          bind:toggle="onTogglePurchased" bind:delete="onDeleteItem" />
+      </view>
+
+      <empty-state wx:if="{{pendingItems.length === 0 && !showAddForm}}" icon="🛒" title="采购清单为空" desc="点击上方按钮添加采购项" />
+    </view>
+
+    <!-- 已购买列表 -->
+    <view wx:if="{{activeTab === 'purchased'}}">
+      <view class="clear-btn" wx:if="{{purchasedCount > 0}}" bindtap="onClearPurchased">
+        <text>🗑️ 清空已购买</text>
+      </view>
+      <shopping-item wx:for="{{purchasedItems}}" wx:key="id" item="{{item}}"
+        bind:toggle="onTogglePurchased" bind:delete="onDeleteItem" />
+      <empty-state wx:if="{{purchasedItems.length === 0}}" icon="✅" title="暂无已购买项" />
+    </view>
+  </view>
+</view>

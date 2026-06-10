@@ -1,0 +1,18 @@
+<view class="font-size-picker">
+  <view class="picker-label">字体大小</view>
+  <view class="picker-options">
+    <view
+      wx:for="{{options}}"
+      wx:key="key"
+      class="option-item {{currentValue === item.key ? 'active' : ''}}"
+      data-key="{{item.key}}"
+      bindtap="handleSelect"
+      role="radio"
+      aria-checked="{{currentValue === item.key}}"
+      aria-label="{{item.label}}字体"
+    >
+      <view class="option-preview" style="font-size: {{item.preview}}rpx;">Aa</view>
+      <view class="option-label">{{item.label}}</view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,56 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/fridge/fridge",
+    "pages/add-food/add-food",
+    "pages/expiry/expiry",
+    "pages/shopping/shopping",
+    "pages/recipes/recipes",
+    "pages/weekly-menu/weekly-menu",
+    "pages/stats/stats",
+    "pages/profile/profile",
+    "pages/scan/scan"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#4CAF50",
+    "navigationBarTitleText": "AI 冰箱助手",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#f5f7fa",
+    "enablePullDownRefresh": false
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#4CAF50",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "assets/icons/home.png",
+        "selectedIconPath": "assets/icons/home-active.png"
+      },
+      {
+        "pagePath": "pages/fridge/fridge",
+        "text": "冰箱",
+        "iconPath": "assets/icons/fridge.png",
+        "selectedIconPath": "assets/icons/fridge-active.png"
+      },
+      {
+        "pagePath": "pages/recipes/recipes",
+        "text": "菜谱",
+        "iconPath": "assets/icons/recipe.png",
+        "selectedIconPath": "assets/icons/recipe-active.png"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的",
+        "iconPath": "assets/icons/profile.png",
+        "selectedIconPath": "assets/icons/profile-active.png"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json",
+  "style": "v2"
+}

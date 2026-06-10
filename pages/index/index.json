@@ -1,0 +1,10 @@
+{
+  "navigationBarTitleText": "AI 冰箱助手",
+  "usingComponents": {
+    "food-card": "/components/food-card/food-card",
+    "stat-card": "/components/stat-card/stat-card",
+    "empty-state": "/components/empty-state/empty-state",
+    "loading-state": "/components/loading-state/loading-state",
+    "recipe-card": "/components/recipe-card/recipe-card"
+  }
+}

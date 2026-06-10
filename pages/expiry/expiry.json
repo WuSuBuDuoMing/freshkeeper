@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "过期提醒",
+  "usingComponents": {
+    "food-card": "/components/food-card/food-card",
+    "empty-state": "/components/empty-state/empty-state",
+    "loading-state": "/components/loading-state/loading-state"
+  }
+}

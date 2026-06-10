@@ -1,0 +1,4 @@
+.swipe-wrapper { position: relative; overflow: hidden; }
+.swipe-content { transition: transform 0.3s ease; position: relative; z-index: 1; }
+.swipe-actions { position: absolute; right: 0; top: 0; bottom: 0; display: flex; z-index: 0; }
+.swipe-action-item { display: flex; align-items: center; justify-content: center; width: 140rpx; font-size: 26rpx; font-weight: 500; }

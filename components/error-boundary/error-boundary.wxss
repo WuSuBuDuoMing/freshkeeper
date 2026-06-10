@@ -1,0 +1,52 @@
+.error-boundary {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200rpx;
+  padding: 40rpx 20rpx;
+}
+
+.error-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.error-icon {
+  font-size: 80rpx;
+  margin-bottom: 16rpx;
+}
+
+.error-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--text-primary, #333);
+  margin-bottom: 12rpx;
+}
+
+.error-message {
+  font-size: 26rpx;
+  color: var(--text-hint, #999);
+  margin-bottom: 32rpx;
+  max-width: 500rpx;
+  line-height: 1.5;
+}
+
+.error-retry-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 40rpx;
+  height: 68rpx;
+  font-size: 28rpx;
+  color: #fff;
+  background-color: var(--color-primary, #4CAF50);
+  border-radius: 34rpx;
+  border: none;
+  line-height: 68rpx;
+}
+
+.error-retry-btn::after {
+  border: none;
+}

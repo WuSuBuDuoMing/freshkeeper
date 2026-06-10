@@ -1,0 +1,28 @@
+<view class="recipe-card" bindtap="onTap" hover-class="card-hover">
+  <view class="recipe-emoji">{{recipe.imageEmoji || '🍳'}}</view>
+  <view class="recipe-info">
+    <view class="recipe-header">
+      <text class="recipe-name">{{recipe.name}}</text>
+      <view class="recipe-tags">
+        <text class="tag" wx:for="{{recipe.tags}}" wx:key="*this">{{item}}</text>
+      </view>
+    </view>
+    <view class="recipe-meta">
+      <text class="meta-item">⏱ {{recipe.cookingTime}}分钟</text>
+      <text class="meta-item">📊 {{recipe.difficulty}}</text>
+      <text class="meta-item">🔥 {{recipe.calories}}卡</text>
+    </view>
+    <view class="recipe-ingredients">
+      <text class="label">已有：</text>
+      <text class="ingredient has" wx:for="{{recipe.usedIngredients}}" wx:key="*this">{{item}}</text>
+    </view>
+    <view class="recipe-ingredients" wx:if="{{showMissing && recipe.missingIngredients && recipe.missingIngredients.length > 0}}">
+      <text class="label">缺少：</text>
+      <text class="ingredient missing" wx:for="{{recipe.missingIngredients}}" wx:key="*this">{{item}}</text>
+    </view>
+    <view class="recipe-reason" wx:if="{{recipe.reason}}">
+      <text class="reason-icon">💡</text>
+      <text class="reason-text">{{recipe.reason}}</text>
+    </view>
+  </view>
+</view>

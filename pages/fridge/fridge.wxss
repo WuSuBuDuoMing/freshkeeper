@@ -1,0 +1,29 @@
+.search-bar { display: flex; align-items: center; gap: 16rpx; margin-bottom: 16rpx; }
+.search-input-wrap {
+  flex: 1; display: flex; align-items: center;
+  background: var(--bg-card, #fff); border-radius: 999rpx;
+  padding: 16rpx 24rpx; box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.04);
+}
+.search-icon { font-size: 28rpx; margin-right: 12rpx; }
+.search-input { flex: 1; font-size: 28rpx; color: var(--text-primary, #1a1a1a); }
+.search-clear { font-size: 28rpx; color: var(--text-hint, #999); padding: 0 8rpx; }
+.add-btn {
+  width: 64rpx; height: 64rpx; display: flex; align-items: center; justify-content: center;
+  background: var(--color-primary, #4CAF50); border-radius: 50%; color: #fff; font-size: 32rpx;
+  box-shadow: 0 4rpx 12rpx rgba(76,175,80,0.3);
+}
+
+.status-filter { display: flex; gap: 12rpx; margin-bottom: 16rpx; flex-wrap: wrap; }
+.status-btn {
+  padding: 10rpx 24rpx; border-radius: 999rpx; font-size: 24rpx;
+  background: var(--bg-card, #fff); color: var(--text-secondary, #666);
+  box-shadow: 0 1rpx 4rpx rgba(0,0,0,0.04);
+}
+.status-btn.active { background: var(--color-primary, #4CAF50); color: #fff; }
+
+.sort-bar { display: flex; align-items: center; gap: 12rpx; margin-bottom: 16rpx; }
+.sort-label { font-size: 24rpx; color: var(--text-hint, #999); }
+.sort-btn { font-size: 24rpx; color: var(--text-hint, #999); padding: 6rpx 12rpx; }
+.sort-btn.active { color: var(--color-primary, #4CAF50); font-weight: 600; }
+.result-count { font-size: 22rpx; color: var(--text-hint, #999); margin-left: auto; }
+.food-list { padding-bottom: 20rpx; }

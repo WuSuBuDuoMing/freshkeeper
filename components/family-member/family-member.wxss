@@ -1,0 +1,120 @@
+/**
+ * 家庭成员组件样式
+ */
+
+.family-member {
+  display: flex;
+  align-items: center;
+  padding: 24rpx;
+  background: #ffffff;
+  border-radius: 16rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.05);
+  margin-bottom: 20rpx;
+}
+
+/* ===== 头像 ===== */
+
+.member-avatar {
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-right: 24rpx;
+}
+
+.avatar-emoji {
+  font-size: 44rpx;
+}
+
+/* ===== 信息区域 ===== */
+
+.member-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.member-top {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-bottom: 8rpx;
+}
+
+.member-name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #333333;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.role-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rpx 16rpx;
+  border-radius: 20rpx;
+  flex-shrink: 0;
+}
+
+.role-text {
+  font-size: 20rpx;
+  color: #ffffff;
+  font-weight: 500;
+}
+
+/* ===== 最近活动 ===== */
+
+.member-activity {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.activity-text {
+  font-size: 24rpx;
+  color: #666666;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+
+.activity-time {
+  font-size: 22rpx;
+  color: #999999;
+  margin-left: 12rpx;
+  flex-shrink: 0;
+}
+
+/* ===== 操作按钮 ===== */
+
+.member-actions {
+  margin-left: 16rpx;
+  flex-shrink: 0;
+}
+
+.action-btn {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-btn--remove {
+  background: #fff0f0;
+}
+
+.action-icon {
+  font-size: 36rpx;
+  color: #FF4757;
+  font-weight: bold;
+  line-height: 1;
+}

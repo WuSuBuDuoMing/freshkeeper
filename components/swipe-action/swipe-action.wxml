@@ -1,0 +1,12 @@
+<view class="swipe-wrapper" bindtouchstart="onTouchStart" bindtouchmove="onTouchMove" bindtouchend="onTouchEnd">
+  <view class="swipe-content" style="transform: translateX({{offsetX}}rpx);">
+    <slot />
+  </view>
+  <view class="swipe-actions" wx:if="{{actions.length > 0}}">
+    <view class="swipe-action-item" wx:for="{{actions}}" wx:key="text"
+      style="background:{{item.bgColor || '#F44336'}}; color:{{item.color || '#fff'}};"
+      data-index="{{index}}" bindtap="onActionTap">
+      <text>{{item.text}}</text>
+    </view>
+  </view>
+</view>

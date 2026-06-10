@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "拍照识别",
+  "usingComponents": {
+    "food-recognizer": "/components/food-recognizer/food-recognizer"
+  }
+}

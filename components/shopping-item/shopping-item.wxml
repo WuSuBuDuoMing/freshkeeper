@@ -1,0 +1,15 @@
+<view class="shopping-item {{item.purchased ? 'purchased' : ''}}">
+  <view class="checkbox" bindtap="onToggle">
+    <text>{{item.purchased ? '☑️' : '⬜'}}</text>
+  </view>
+  <view class="item-info">
+    <text class="item-name {{item.purchased ? 'done' : ''}}">{{item.name}}</text>
+    <view class="item-meta">
+      <text class="meta-text">{{item.quantity}}{{item.unit}}</text>
+      <text class="meta-price">约 ¥{{item.estimatedPrice}}</text>
+    </view>
+  </view>
+  <view class="delete-btn" bindtap="onDelete">
+    <text>✕</text>
+  </view>
+</view>

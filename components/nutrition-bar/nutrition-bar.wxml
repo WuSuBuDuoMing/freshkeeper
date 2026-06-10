@@ -1,0 +1,73 @@
+<!--
+  营养进度条组件
+  显示热量、蛋白质、脂肪、碳水化合物的每日摄入进度
+-->
+<view class="nutrition-bar">
+  <!-- 热量（大卡片） -->
+  <view class="bar-item bar-item--main">
+    <view class="bar-header">
+      <text class="bar-label">🔥 热量</text>
+      <text class="bar-value" wx:if="{{showDetail}}">
+        {{current.calories}} / {{target.calories}} kcal
+      </text>
+    </view>
+    <view class="track">
+      <view
+        class="fill fill--calories"
+        style="width: {{percentages.calories}}%"
+      ></view>
+    </view>
+    <text class="bar-percent">{{percentages.calories}}%</text>
+  </view>
+
+  <!-- 三大营养素（三列） -->
+  <view class="bar-group">
+    <!-- 蛋白质 -->
+    <view class="bar-item bar-item--small">
+      <view class="bar-header">
+        <text class="bar-label bar-label--small">💪 蛋白质</text>
+      </view>
+      <view class="track track--small">
+        <view
+          class="fill fill--protein"
+          style="width: {{percentages.protein}}%"
+        ></view>
+      </view>
+      <text class="bar-value bar-value--small" wx:if="{{showDetail}}">
+        {{current.protein}}/{{target.protein}}g
+      </text>
+    </view>
+
+    <!-- 脂肪 -->
+    <view class="bar-item bar-item--small">
+      <view class="bar-header">
+        <text class="bar-label bar-label--small">🧈 脂肪</text>
+      </view>
+      <view class="track track--small">
+        <view
+          class="fill fill--fat"
+          style="width: {{percentages.fat}}%"
+        ></view>
+      </view>
+      <text class="bar-value bar-value--small" wx:if="{{showDetail}}">
+        {{current.fat}}/{{target.fat}}g
+      </text>
+    </view>
+
+    <!-- 碳水 -->
+    <view class="bar-item bar-item--small">
+      <view class="bar-header">
+        <text class="bar-label bar-label--small">🌾 碳水</text>
+      </view>
+      <view class="track track--small">
+        <view
+          class="fill fill--carbs"
+          style="width: {{percentages.carbs}}%"
+        ></view>
+      </view>
+      <text class="bar-value bar-value--small" wx:if="{{showDetail}}">
+        {{current.carbs}}/{{target.carbs}}g
+      </text>
+    </view>
+  </view>
+</view>

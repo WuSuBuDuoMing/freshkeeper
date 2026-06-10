@@ -1,0 +1,39 @@
+<view class="container">
+  <loading-state wx:if="{{loading}}" text="正在生成一周菜单..." />
+
+  <view wx:if="{{!loading}}">
+    <button class="btn-primary btn-add-all" bindtap="onAddAllToShopping">🛒 一键加入一周食材到采购清单</button>
+
+    <view class="day-card card" wx:for="{{weekMenu}}" wx:key="date">
+      <view class="day-header">
+        <view class="day-info {{item.isToday ? 'today' : ''}}">
+          <text class="day-weekday">{{item.weekday}}</text>
+          <text class="day-date">{{item.month}}/{{item.day}}</text>
+          <text class="today-badge" wx:if="{{item.isToday}}">今天</text>
+        </view>
+        <view class="day-actions">
+          <view class="day-btn" data-date="{{item.date}}" bindtap="onRegenerateDay">🔄</view>
+          <view class="day-btn" data-date="{{item.date}}" bindtap="onAddDayToShopping">🛒</view>
+        </view>
+      </view>
+
+      <view class="meals">
+        <view class="meal-item" wx:if="{{item.meals.breakfast}}">
+          <text class="meal-label">🌅 早餐</text>
+          <text class="meal-name">{{item.meals.breakfast.name}}</text>
+          <view class="meal-emoji">{{item.meals.breakfast.imageEmoji}}</view>
+        </view>
+        <view class="meal-item" wx:if="{{item.meals.lunch}}">
+          <text class="meal-label">☀️ 午餐</text>
+          <text class="meal-name">{{item.meals.lunch.name}}</text>
+          <view class="meal-emoji">{{item.meals.lunch.imageEmoji}}</view>
+        </view>
+        <view class="meal-item" wx:if="{{item.meals.dinner}}">
+          <text class="meal-label">🌙 晚餐</text>
+          <text class="meal-name">{{item.meals.dinner.name}}</text>
+          <view class="meal-emoji">{{item.meals.dinner.imageEmoji}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

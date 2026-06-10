@@ -1,0 +1,13 @@
+<view class="recognizer-item {{item.selected ? 'selected' : ''}}" bindtap="onToggle">
+  <view class="checkbox">{{item.selected ? '☑' : '☐'}}</view>
+  <view class="item-emoji">{{item.emoji}}</view>
+  <view class="item-info">
+    <input class="item-name" value="{{item.name}}" bindinput="onNameInput" catchtap="" placeholder="食材名称" />
+    <view class="item-meta">
+      <input class="qty-input" type="number" value="{{item.quantity || 1}}" bindinput="onQuantityInput" catchtap="" />
+      <text class="item-unit">{{item.unit}}</text>
+      <text class="item-confidence">置信度 {{(item.confidence * 100).toFixed(0)}}%</text>
+    </view>
+  </view>
+  <view class="category-tag">{{item.category}}</view>
+</view>

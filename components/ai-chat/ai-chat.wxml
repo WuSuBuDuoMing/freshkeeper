@@ -1,0 +1,106 @@
+<!--
+  AI 对话组件
+  展示对话流，支持 markdown 渲染（简单文本）和流式打字效果
+-->
+<view class="ai-chat {{expanded ? 'expanded' : ''}}">
+  <!-- 触发按钮 -->
+  <view class="chat-trigger" bindtap="togglePanel">
+    <text class="trigger-icon">{{expanded ? '✕' : '🧑‍🍳'}}</text>
+    <text class="trigger-text">{{expanded ? '关闭' : 'AI 问菜谱'}}</text>
+  </view>
+
+  <!-- 聊天面板 -->
+  <view class="chat-panel" wx:if="{{expanded}}">
+    <!-- 消息列表 -->
+    <scroll-view
+      class="message-list"
+      scroll-y
+      scroll-into-view="{{scrollToId}}"
+      scroll-with-animation
+    >
+      <!-- 欢迎消息 / 历史消息 -->
+      <block wx:for="{{messages}}" wx:key="id">
+        <view id="{{item.id}}" class="message-row {{item.role === 'user' ? 'row-user' : 'row-ai'}}">
+          <!-- AI 头像 -->
+          <view class="avatar avatar-ai" wx:if="{{item.role === 'ai'}}">
+            <text class="avatar-text">🤖</text>
+          </view>
+
+          <!-- 消息气泡 -->
+          <view class="bubble bubble-{{item.role}} {{item.isError ? 'bubble-error' : ''}}">
+            <!-- 加载动画 -->
+            <view class="typing-indicator" wx:if="{{item.loading}}">
+              <view class="dot dot1"></view>
+              <view class="dot dot2"></view>
+              <view class="dot dot3"></view>
+            </view>
+
+            <!-- 消息文本 -->
+            <text class="bubble-text" wx:if="{{!item.loading}}">{{item.content}}</text>
+
+            <!-- 时间戳 -->
+            <view class="bubble-time" wx:if="{{!item.loading}}">
+              <text>{{item.timestamp}}</text>
+            </view>
+          </view>
+
+          <!-- 用户头像 -->
+          <view class="avatar avatar-user" wx:if="{{item.role === 'user'}}">
+            <text class="avatar-text">😊</text>
+          </view>
+        </view>
+      </block>
+
+      <!-- 底部锚点 -->
+      <view id="msg_bottom"></view>
+    </scroll-view>
+
+    <!-- 快捷操作 -->
+    <view class="quick-actions" wx:if="{{messages.length <= 2 && !generating}}">
+      <view
+        class="quick-btn"
+        wx:for="{{quickActions}}"
+        wx:key="key"
+        data-key="{{item.key}}"
+        bindtap="onQuickAction"
+      >
+        <text class="quick-icon">{{item.icon}}</text>
+        <text class="quick-label">{{item.label}}</text>
+      </view>
+    </view>
+
+    <!-- 操作栏 -->
+    <view class="action-bar" wx:if="{{messages.length > 0 && !generating}}">
+      <view class="action-btn" bindtap="onRegenerate">
+        <text class="action-icon">🔄</text>
+        <text class="action-text">重新生成</text>
+      </view>
+      <view class="action-btn" bindtap="onCopyLast">
+        <text class="action-icon">📋</text>
+        <text class="action-text">复制结果</text>
+      </view>
+    </view>
+
+    <!-- 输入框 -->
+    <view class="input-bar">
+      <input
+        class="chat-input"
+        placeholder="描述你想做的菜..."
+        placeholder-class="input-placeholder"
+        value="{{inputValue}}"
+        bindinput="onInputChange"
+        bindconfirm="onSend"
+        confirm-type="send"
+        disabled="{{generating}}"
+        auto-focus="{{autoFocus}}"
+      />
+      <view
+        class="send-btn {{inputValue && !generating ? 'send-active' : ''}}"
+        bindtap="onSend"
+      >
+        <text wx:if="{{generating}}" class="send-loading">⏳</text>
+        <text wx:else class="send-icon">➤</text>
+      </view>
+    </view>
+  </view>
+</view>

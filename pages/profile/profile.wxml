@@ -1,0 +1,74 @@
+<view class="container">
+  <!-- 用户信息 -->
+  <view class="profile-header card">
+    <view class="avatar avatar-lg">
+      <text class="avatar-text">🧊</text>
+    </view>
+    <view class="profile-info">
+      <text class="profile-name">周先生</text>
+      <text class="profile-desc">健康饮食从管理食材开始</text>
+    </view>
+  </view>
+
+  <!-- 数据概览 -->
+  <view class="stats-row">
+    <view class="stat-mini">
+      <text class="stat-mini-value">{{cookingDays}}</text>
+      <text class="stat-mini-label">做饭天数</text>
+    </view>
+    <view class="stat-mini">
+      <text class="stat-mini-value">{{storageUsed}}</text>
+      <text class="stat-mini-label">缓存 KB</text>
+    </view>
+    <view class="stat-mini">
+      <text class="stat-mini-value">v{{version}}</text>
+      <text class="stat-mini-label">版本</text>
+    </view>
+  </view>
+
+  <!-- 功能菜单 -->
+  <view class="menu-section">
+    <view class="menu-item" bindtap="onGoExpiry">
+      <text class="menu-icon">⏰</text>
+      <text class="menu-name">过期提醒</text>
+      <text class="menu-arrow">›</text>
+    </view>
+    <view class="menu-item" bindtap="onGoShopping">
+      <text class="menu-icon">🛒</text>
+      <text class="menu-name">采购清单</text>
+      <text class="menu-arrow">›</text>
+    </view>
+    <view class="menu-item" bindtap="onGoStats">
+      <text class="menu-icon">📊</text>
+      <text class="menu-name">统计分析</text>
+      <text class="menu-arrow">›</text>
+    </view>
+    <view class="menu-item" bindtap="onGoWeeklyMenu">
+      <text class="menu-icon">📅</text>
+      <text class="menu-name">一周菜单</text>
+      <text class="menu-arrow">›</text>
+    </view>
+  </view>
+
+  <!-- 设置 -->
+  <view class="menu-section">
+    <view class="menu-item" bindtap="onToggleTheme">
+      <text class="menu-icon">🌙</text>
+      <text class="menu-name">暗黑模式</text>
+      <switch class="menu-switch" checked="{{isDark}}" color="#4CAF50" />
+    </view>
+    <view class="menu-item" bindtap="onClearData">
+      <text class="menu-icon">🗑️</text>
+      <text class="menu-name">清除数据</text>
+      <text class="menu-arrow">›</text>
+    </view>
+  </view>
+
+  <!-- 底部信息 -->
+  <view class="footer">
+    <text class="footer-text">AI 冰箱食材管理助手 v{{version}}</text>
+    <text class="footer-text">Made with ❤️ by Vibe Coding</text>
+  </view>
+
+  <view style="height: 120rpx;"></view>
+</view>

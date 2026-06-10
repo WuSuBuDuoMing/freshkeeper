@@ -1,0 +1,14 @@
+<scroll-view class="tabs-scroll" scroll-x="true" enhanced="true" show-scrollbar="false">
+  <view class="tabs-container">
+    <view
+      class="tab-item {{item.key === activeKey ? 'active' : ''}}"
+      wx:for="{{categories}}"
+      wx:key="key"
+      data-key="{{item.key}}"
+      bindtap="onSelect"
+    >
+      <text class="tab-icon">{{item.icon}}</text>
+      <text class="tab-name">{{item.name}}</text>
+    </view>
+  </view>
+</scroll-view>

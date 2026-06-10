@@ -1,0 +1,124 @@
+<view class="container {{isDark ? 'dark' : ''}}">
+  <loading-state wx:if="{{loading}}" text="正在加载冰箱数据..." />
+
+  <view wx:if="{{!loading}}">
+    <!-- 顶部问候 -->
+    <view class="greeting-card card">
+      <view class="greeting-header">
+        <text class="greeting-emoji">🧊</text>
+        <view>
+          <text class="greeting-title">你好，周先生</text>
+          <text class="greeting-sub">你的冰箱有 {{overview.total}} 样食材</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 快捷入口 -->
+    <view class="quick-entry">
+      <view class="entry-item" bindtap="onAddFood">
+        <view class="entry-icon" style="background: rgba(76,175,80,0.1);">
+          <text>➕</text>
+        </view>
+        <text class="entry-text">添加食材</text>
+      </view>
+      <view class="entry-item" bindtap="onViewExpiry">
+        <view class="entry-icon" style="background: rgba(255,152,0,0.1);">
+          <text>⏰</text>
+        </view>
+        <text class="entry-text">过期提醒</text>
+      </view>
+      <view class="entry-item" bindtap="onViewRecipes">
+        <view class="entry-icon" style="background: rgba(244,67,54,0.1);">
+          <text>🍳</text>
+        </view>
+        <text class="entry-text">菜谱推荐</text>
+      </view>
+      <view class="entry-item" bindtap="onGoShopping">
+        <view class="entry-icon" style="background: rgba(33,150,243,0.1);">
+          <text>🛒</text>
+        </view>
+        <text class="entry-text">采购清单</text>
+      </view>
+    </view>
+
+    <!-- 数据概览 -->
+    <view class="section">
+      <text class="section-title">📊 数据概览</text>
+      <view class="stats-grid">
+        <stat-card title="食材总数" value="{{overview.total}}" icon="🥬" color="#4CAF50" bgColor="rgba(76,175,80,0.08)" />
+        <stat-card title="即将过期" value="{{overview.expiringCount}}" icon="⚠️" color="#FF9800" bgColor="rgba(255,152,0,0.08)" />
+        <stat-card title="已过期" value="{{overview.expiredCount}}" icon="❌" color="#F44336" bgColor="rgba(244,67,54,0.08)" />
+        <stat-card title="浪费估算" value="¥{{overview.wastedValue}}" icon="💰" color="#9C27B0" bgColor="rgba(156,39,176,0.08)" />
+      </view>
+    </view>
+
+    <!-- 今日待处理 -->
+    <view class="section" wx:if="{{todayTasks.length > 0}}">
+      <view class="section-header flex-between">
+        <text class="section-title">🔔 今日待处理</text>
+        <text class="section-more" bindtap="onViewExpiry">查看全部</text>
+      </view>
+      <view class="task-list">
+        <food-card
+          wx:for="{{todayTasks}}"
+          wx:key="id"
+          food="{{item}}"
+          showActions="{{false}}"
+          compact="{{true}}"
+          bind:tap="onFoodTap"
+        />
+      </view>
+    </view>
+
+    <!-- 今日推荐菜谱 -->
+    <view class="section" wx:if="{{topRecipe}}">
+      <view class="section-header flex-between">
+        <text class="section-title">🍳 今日推荐菜谱</text>
+        <text class="section-more" bindtap="onViewRecipes">更多菜谱</text>
+      </view>
+      <recipe-card recipe="{{topRecipe}}" showMissing="{{true}}" bind:tap="onRecipeTap" />
+    </view>
+
+    <!-- 最近食材 -->
+    <view class="section" wx:if="{{recentFoods.length > 0}}">
+      <view class="section-header flex-between">
+        <text class="section-title">🕐 最近添加</text>
+        <text class="section-more" bindtap="onGoFridge">查看全部</text>
+      </view>
+      <food-card
+        wx:for="{{recentFoods}}"
+        wx:key="id"
+        food="{{item}}"
+        showActions="{{false}}"
+        compact="{{true}}"
+        bind:tap="onFoodTap"
+      />
+    </view>
+
+    <!-- 功能入口 -->
+    <view class="section">
+      <text class="section-title">✨ 更多功能</text>
+      <view class="feature-grid">
+        <view class="feature-item" bindtap="onGoWeeklyMenu">
+          <text class="feature-emoji">📅</text>
+          <text class="feature-name">一周菜单</text>
+        </view>
+        <view class="feature-item" bindtap="onGoStats">
+          <text class="feature-emoji">📊</text>
+          <text class="feature-name">统计分析</text>
+        </view>
+        <view class="feature-item" bindtap="onGoFridge">
+          <text class="feature-emoji">🧊</text>
+          <text class="feature-name">我的冰箱</text>
+        </view>
+        <view class="feature-item" bindtap="onGoShopping">
+          <text class="feature-emoji">🛒</text>
+          <text class="feature-name">采购清单</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 底部间距 -->
+    <view style="height: 120rpx;"></view>
+  </view>
+</view>

@@ -1,0 +1,7 @@
+<view class="pull-refresh" style="transform: translateY({{offset}}rpx);">
+  <view class="refresh-indicator" style="opacity:{{indicatorOpacity}};">
+    <view class="refresh-icon {{refreshing ? 'spinning' : ''}}" style="transform:rotate({{rotateDeg}}deg);">🧊</view>
+    <text class="refresh-text">{{refreshText}}</text>
+  </view>
+  <slot />
+</view>

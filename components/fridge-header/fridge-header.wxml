@@ -1,0 +1,16 @@
+<view class="fridge-header">
+  <view class="header-left">
+    <view class="back-btn" wx:if="{{showBack}}" bindtap="onBack">
+      <text>←</text>
+    </view>
+    <view class="header-titles">
+      <text class="header-title">{{title}}</text>
+      <text class="header-subtitle" wx:if="{{subtitle}}">{{subtitle}}</text>
+    </view>
+  </view>
+  <view class="header-right">
+    <view class="add-btn" wx:if="{{showAdd}}" bindtap="onAdd">
+      <text>＋</text>
+    </view>
+  </view>
+</view>

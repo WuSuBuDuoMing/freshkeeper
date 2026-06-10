@@ -1,0 +1,85 @@
+<view class="container">
+  <loading-state wx:if="{{loading}}" text="AI 正在分析冰箱食材..." />
+
+  <view wx:if="{{!loading}}">
+    <!-- 刷新按钮 -->
+    <view class="refresh-bar">
+      <view class="refresh-btn" bindtap="onRefresh">
+        <text>🔄 刷新推荐</text>
+      </view>
+      <view class="weekly-menu-btn" bindtap="goToWeeklyMenu">
+        <text>📅 一周菜单</text>
+      </view>
+    </view>
+
+    <!-- 菜谱列表 -->
+    <view class="recipe-list" wx:if="{{recipes.length > 0}}">
+      <recipe-card
+        wx:for="{{recipes}}"
+        wx:key="id"
+        recipe="{{item}}"
+        bind:tap="onRecipeTap"
+      />
+    </view>
+
+    <empty-state wx:if="{{recipes.length === 0}}" icon="🍳" title="暂无推荐菜谱" desc="先去添加一些食材吧" />
+
+    <!-- 菜谱详情弹窗 -->
+    <view class="modal-mask" wx:if="{{showDetail}}" bindtap="onCloseDetail">
+      <view class="modal-content" catchtap="">
+        <view class="modal-header">
+          <text class="modal-title">{{selectedRecipe.imageEmoji}} {{selectedRecipe.name}}</text>
+          <text class="modal-close" bindtap="onCloseDetail">✕</text>
+        </view>
+        <view class="modal-body">
+          <view class="detail-row">
+            <text class="detail-label">⏱ 时间</text>
+            <text class="detail-value">{{selectedRecipe.cookingTime}} 分钟</text>
+          </view>
+          <view class="detail-row">
+            <text class="detail-label">📊 难度</text>
+            <text class="detail-value">{{selectedRecipe.difficulty}}</text>
+          </view>
+          <view class="detail-row">
+            <text class="detail-label">🔥 热量</text>
+            <text class="detail-value">{{selectedRecipe.calories}} 卡</text>
+          </view>
+
+          <view class="detail-section">
+            <text class="detail-section-title">已有食材</text>
+            <view class="tag-list">
+              <text class="tag tag-primary" wx:for="{{selectedRecipe.usedIngredients}}" wx:key="*this">{{item}}</text>
+            </view>
+          </view>
+
+          <view class="detail-section" wx:if="{{selectedRecipe.missingIngredients && selectedRecipe.missingIngredients.length > 0}}">
+            <text class="detail-section-title">缺少食材</text>
+            <view class="tag-list">
+              <text class="tag tag-danger" wx:for="{{selectedRecipe.missingIngredients}}" wx:key="*this">{{item}}</text>
+            </view>
+          </view>
+
+          <view class="detail-section">
+            <text class="detail-section-title">烹饪步骤</text>
+            <view class="steps-list">
+              <view class="step-item" wx:for="{{selectedRecipe.steps}}" wx:key="*this">
+                <text class="step-num">{{index + 1}}</text>
+                <text class="step-text">{{item}}</text>
+              </view>
+            </view>
+          </view>
+
+          <view class="detail-section" wx:if="{{selectedRecipe.reason}}">
+            <text class="detail-section-title">💡 推荐理由</text>
+            <text class="reason-text">{{selectedRecipe.reason}}</text>
+          </view>
+        </view>
+        <view class="modal-footer">
+          <button class="btn-primary" bindtap="onAddMissingToShopping" wx:if="{{selectedRecipe.missingIngredients && selectedRecipe.missingIngredients.length > 0}}">
+            将缺少食材加入采购清单
+          </button>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

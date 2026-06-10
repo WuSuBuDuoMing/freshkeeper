@@ -1,0 +1,20 @@
+.fab-container { position: fixed; z-index: 100; }
+.fab-btn {
+  width: 112rpx; height: 112rpx; border-radius: 50%;
+  background: linear-gradient(135deg, #66BB6A, #43A047);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 6rpx 24rpx rgba(76,175,80,0.4);
+  transition: transform 0.3s ease;
+}
+.fab-btn.expanded { transform: rotate(45deg); }
+.fab-icon { font-size: 48rpx; color: #fff; }
+.fab-actions { position: absolute; bottom: 130rpx; right: 0; display: flex; flex-direction: column; align-items: flex-end; gap: 16rpx; }
+.fab-action-item {
+  display: flex; align-items: center; gap: 12rpx; padding: 16rpx 24rpx;
+  background: #fff; border-radius: 999rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.12);
+  animation: fabSlideUp 0.3s ease forwards; opacity: 0;
+}
+.fab-action-icon { font-size: 32rpx; }
+.fab-action-label { font-size: 26rpx; color: #1a1a1a; white-space: nowrap; }
+@keyframes fabSlideUp { from { opacity:0; transform:translateY(20rpx); } to { opacity:1; transform:translateY(0); } }

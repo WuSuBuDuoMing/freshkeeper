@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "一周菜单",
+  "usingComponents": {
+    "loading-state": "/components/loading-state/loading-state"
+  }
+}

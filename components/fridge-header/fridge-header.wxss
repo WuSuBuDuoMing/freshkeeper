@@ -1,0 +1,18 @@
+.fridge-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 24rpx 0;
+}
+.header-left { display: flex; align-items: center; gap: 16rpx; }
+.back-btn {
+  width: 64rpx; height: 64rpx; display: flex; align-items: center; justify-content: center;
+  background: var(--bg-card, #fff); border-radius: 50%; font-size: 32rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.06);
+}
+.header-titles { display: flex; flex-direction: column; }
+.header-title { font-size: 36rpx; font-weight: 700; color: var(--text-primary, #1a1a1a); }
+.header-subtitle { font-size: 24rpx; color: var(--text-hint, #999); margin-top: 2rpx; }
+.add-btn {
+  width: 64rpx; height: 64rpx; display: flex; align-items: center; justify-content: center;
+  background: var(--color-primary, #4CAF50); border-radius: 50%; color: #fff; font-size: 36rpx;
+  box-shadow: 0 4rpx 12rpx rgba(76,175,80,0.3);
+}

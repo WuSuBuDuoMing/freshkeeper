@@ -1,0 +1,25 @@
+.idle-state { display: flex; flex-direction: column; align-items: center; padding-top: 120rpx; }
+.big-icon { font-size: 120rpx; margin-bottom: 24rpx; }
+.scan-title { font-size: 36rpx; font-weight: 700; color: #1a1a1a; margin-bottom: 12rpx; }
+.scan-desc { font-size: 26rpx; color: #999; margin-bottom: 48rpx; text-align: center; padding: 0 40rpx; }
+.scan-btn { width: 400rpx; margin-bottom: 20rpx; }
+.preview-image { width: 100%; height: 400rpx; border-radius: 16rpx; margin-bottom: 24rpx; }
+.preview-image-small { width: 100%; height: 240rpx; border-radius: 16rpx; margin-bottom: 16rpx; }
+.analyzing { display: flex; flex-direction: column; align-items: center; padding: 48rpx 0; }
+.analyzing-text { font-size: 28rpx; color: #666; margin-top: 16rpx; }
+.results-title { font-size: 32rpx; font-weight: 600; color: #1a1a1a; margin-bottom: 8rpx; display: block; }
+.results-sub { font-size: 24rpx; color: #999; margin-bottom: 16rpx; display: block; }
+.results-list { margin-bottom: 120rpx; }
+.bottom-bar {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  display: flex; gap: 16rpx; padding: 20rpx 32rpx;
+  background: #fff; box-shadow: 0 -2rpx 12rpx rgba(0,0,0,0.06);
+}
+.bottom-bar button { flex: 1; }
+.error-state { display: flex; flex-direction: column; align-items: center; padding-top: 200rpx; }
+.loading-spinner {
+  width: 48rpx; height: 48rpx; border: 4rpx solid #eee;
+  border-top-color: #4CAF50; border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }

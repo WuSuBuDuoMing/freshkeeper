@@ -1,0 +1,64 @@
+<view class="container">
+  <!-- 搜索栏 -->
+  <view class="search-bar">
+    <view class="search-input-wrap">
+      <text class="search-icon">🔍</text>
+      <input class="search-input" placeholder="搜索食材..." value="{{searchKeyword}}" bindinput="onSearchInput" />
+      <text class="search-clear" wx:if="{{searchKeyword}}" bindtap="onSearchClear">✕</text>
+    </view>
+    <view class="add-btn" bindtap="onAddFood">
+      <text>＋</text>
+    </view>
+  </view>
+
+  <!-- 分类标签 -->
+  <category-tabs categories="{{categories}}" activeKey="{{activeCategory}}" bind:change="onCategoryChange" />
+
+  <!-- 状态筛选 -->
+  <view class="status-filter">
+    <view
+      class="status-btn {{activeStatus === item.key ? 'active' : ''}}"
+      wx:for="{{statusList}}"
+      wx:key="key"
+      data-key="{{item.key}}"
+      bindtap="onStatusChange"
+    >
+      <text>{{item.name}}</text>
+    </view>
+  </view>
+
+  <!-- 排序选项 -->
+  <view class="sort-bar">
+    <text class="sort-label">排序：</text>
+    <text class="sort-btn {{sortBy === 'expiry' ? 'active' : ''}}" data-sort="expiry" bindtap="onSortChange">过期时间</text>
+    <text class="sort-btn {{sortBy === 'name' ? 'active' : ''}}" data-sort="name" bindtap="onSortChange">名称</text>
+    <text class="sort-btn {{sortBy === 'created' ? 'active' : ''}}" data-sort="created" bindtap="onSortChange">最近添加</text>
+    <text class="result-count">{{filteredFoods.length}} 项</text>
+  </view>
+
+  <!-- 食材列表 -->
+  <loading-state wx:if="{{loading}}" />
+
+  <empty-state
+    wx:elif="{{isEmpty}}"
+    icon="📭"
+    title="没有找到食材"
+    desc="{{searchKeyword ? '换个关键词试试' : '冰箱空空的，快去添加食材吧'}}"
+    btnText="{{!searchKeyword ? '添加食材' : ''}}"
+    bind:action="onAddFood"
+  />
+
+  <view wx:else class="food-list">
+    <food-card
+      wx:for="{{filteredFoods}}"
+      wx:key="id"
+      food="{{item}}"
+      bind:tap="onFoodTap"
+      bind:useup="onFoodUseUp"
+      bind:delete="onFoodDelete"
+    />
+  </view>
+
+  <!-- 底部间距 -->
+  <view style="height: 120rpx;"></view>
+</view>

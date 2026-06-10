@@ -1,0 +1,12 @@
+<view class="image-picker">
+  <view class="image-grid">
+    <view class="image-item" wx:for="{{images}}" wx:key="index">
+      <image src="{{item}}" mode="aspectFill" bindtap="onPreview" data-index="{{index}}" />
+      <view class="delete-btn" catchtap="onDelete" data-index="{{index}}">✕</view>
+    </view>
+    <view class="add-btn" wx:if="{{images.length < maxCount}}" bindtap="onChoose">
+      <text class="add-icon">📷</text>
+      <text class="add-text">添加图片</text>
+    </view>
+  </view>
+</view>

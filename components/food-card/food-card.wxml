@@ -1,0 +1,34 @@
+<view class="food-card {{compact ? 'compact' : ''}}" bindtap="onTap" hover-class="card-hover">
+  <!-- 左侧图标 -->
+  <view class="food-icon">
+    <text class="emoji">{{emoji}}</text>
+  </view>
+
+  <!-- 中间信息 -->
+  <view class="food-info">
+    <view class="food-header">
+      <text class="food-name">{{food.name}}</text>
+      <view class="{{statusClass}}">{{statusText}}</view>
+    </view>
+    <view class="food-meta">
+      <text class="meta-text">{{food.category}} · {{food.quantity}}{{food.unit}}</text>
+      <text class="meta-text" style="color: {{statusColor}};">{{daysText}}</text>
+    </view>
+    <view class="food-notes" wx:if="{{food.notes && !compact}}">
+      <text class="notes-text">{{food.notes}}</text>
+    </view>
+  </view>
+
+  <!-- 右侧操作 -->
+  <view class="food-actions" wx:if="{{showActions}}" catchtap="">
+    <view class="action-btn" bindtap="onEdit" wx:if="{{food.status !== 'used'}}">
+      <text>✏️</text>
+    </view>
+    <view class="action-btn" bindtap="onUseUp" wx:if="{{food.status !== 'used'}}">
+      <text>✅</text>
+    </view>
+    <view class="action-btn" bindtap="onDelete">
+      <text>🗑️</text>
+    </view>
+  </view>
+</view>

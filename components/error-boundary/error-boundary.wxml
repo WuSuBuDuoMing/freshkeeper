@@ -1,0 +1,9 @@
+<view class="error-boundary" wx:if="{{hasError}}">
+  <view class="error-content">
+    <text class="error-icon">😔</text>
+    <text class="error-title">组件加载失败</text>
+    <text class="error-message">{{displayMessage}}</text>
+    <button class="error-retry-btn" wx:if="{{showRetry}}" bindtap="onRetry">重新加载</button>
+  </view>
+</view>
+<slot wx:else />
