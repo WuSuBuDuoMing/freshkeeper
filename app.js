@@ -27,6 +27,6 @@ App({
     isIOS: false,
     themeMode: 'light', // light | dark
     userInfo: null,
-    version: '1.0.0'
+    version: '2.1.0'
   }
 })

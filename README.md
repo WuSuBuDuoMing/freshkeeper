@@ -1,86 +1,99 @@
-# 🧊 AI 冰箱食材管理助手
+# FreshKeeper — AI 冰箱食材管理助手
 
-> 帮助用户管理冰箱食材、过期提醒、采购清单和 AI 菜谱推荐的微信小程序
+[![WeChat Mini Program](https://img.shields.io/badge/WeChat-Mini%20Program-07C160?logo=wechat)](https://developers.weixin.qq.com/miniprogram/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Version](https://img.shields.io/badge/version-v2.1.0-green)](https://github.com/WuSuBuDuoMing/freshkeeper/releases)
 
-## ✨ 功能特性
+> 管理冰箱食材、过期提醒、采购清单和 AI 菜谱推荐的微信小程序
 
-- 🏠 **首页仪表盘** - 食材概览、今日待办、快捷入口
-- 🧊 **冰箱管理** - 分类筛选、搜索、状态管理
-- ➕ **食材添加/编辑** - 完整表单校验、日期管理
-- ⏰ **过期提醒** - 分级预警（今日/3天/7天/已过期）
-- 🛒 **采购清单** - 手动添加、分类分组、预计花费
-- 🤖 **AI 菜谱推荐** - 基于冰箱食材智能推荐
-- 📅 **一周菜单** - 自动生成7天三餐建议
-- 📊 **统计分析** - 分类占比、浪费统计、省钱建议
-- 🌙 **暗黑模式** - 支持浅色/暗黑主题切换
-- 👤 **个人中心** - 设置、数据管理
+**[English](#features) | [中文文档](README.zh-CN.md)**
 
-## 🚀 快速开始
+## Features
 
-### 环境要求
-- 微信开发者工具
-- 基础库 3.3.4+
+- **Fridge Dashboard** — food overview, daily tasks, quick actions
+- **Food Management** — category filter, search, status tracking
+- **Expiry Alerts** — tiered warnings (today / 3 days / 7 days / expired)
+- **Shopping List** — manual add, category grouping, cost estimation
+- **AI Recipe Recommendations** — smart suggestions based on fridge contents
+- **Weekly Menu** — auto-generated 7-day meal plan
+- **Statistics** — category distribution, waste tracking, saving tips
+- **Dark Mode** — light / dark theme toggle
+- **Accessibility** — font size, high contrast, color blind modes
+- **i18n** — Simplified Chinese and English
 
-### 运行步骤
-1. 打开微信开发者工具
-2. 导入项目 `AI冰箱食材管理助手` 目录
-3. 填入你的 AppID（或使用测试号）
-4. 编译运行即可
+## Quick Start
 
-> 项目使用 mock 数据，无需后端服务，开箱即用。
+### Prerequisites
 
-## 📁 项目结构
+- [WeChat Developer Tools](https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html)
+- Base library 3.3.4+
 
-```
-AI冰箱食材管理助手/
-├── app.js / app.json / app.wxss    # 小程序入口
-├── pages/
-│   ├── index/          # 首页仪表盘
-│   ├── fridge/         # 冰箱食材列表
-│   ├── add-food/       # 添加/编辑食材
-│   ├── expiry/         # 过期提醒
-│   ├── shopping/       # 采购清单
-│   ├── recipes/        # AI 菜谱推荐
-│   ├── weekly-menu/    # 一周菜单
-│   ├── stats/          # 统计分析
-│   └── profile/        # 个人中心
-├── components/         # 公共组件（9个）
-├── services/           # 业务服务层
-├── utils/              # 工具函数层
-├── docs/               # 项目文档
-└── tests/              # 测试用例
+### Run
+
+```bash
+git clone https://github.com/WuSuBuDuoMing/freshkeeper.git
 ```
 
-## 🧩 技术架构
+1. Open WeChat Developer Tools
+2. Import the project directory
+3. Enter your AppID (or use a test account)
+4. Compile and run
 
-- **前端框架**：微信小程序原生开发
-- **数据层**：Mock 数据 + wx.setStorageSync 本地缓存
-- **架构模式**：Page → Service → Storage 三层架构
-- **主题系统**：CSS 变量 + Behavior 混入
-- **组件设计**：纯展示组件，通过 properties/triggerEvent 通信
+> Uses mock data — no backend required, works out of the box.
 
-## 📱 页面一览
+## Architecture
 
-| 页面 | 路径 | 说明 |
-|------|------|------|
-| 首页 | pages/index/index | 食材概览、快捷入口、推荐菜谱 |
-| 冰箱 | pages/fridge/fridge | 食材列表、分类筛选、搜索 |
-| 添加 | pages/add-food/add-food | 添加/编辑食材表单 |
-| 过期 | pages/expiry/expiry | 分级过期提醒 |
-| 采购 | pages/shopping/shopping | 采购清单管理 |
-| 菜谱 | pages/recipes/recipes | AI 菜谱推荐 |
-| 菜单 | pages/weekly-menu/weekly-menu | 一周菜单生成 |
-| 统计 | pages/stats/stats | 数据分析 |
-| 我的 | pages/profile/profile | 个人中心 |
+```
+Page → Service → Storage (three-layer architecture)
+```
 
-## 📄 相关文档
+| Layer | Responsibility | Example |
+|-------|---------------|---------|
+| Page | UI rendering, user interaction | `pages/fridge/fridge` |
+| Service | Business logic, CRUD operations | `services/food-service.js` |
+| Storage | Local persistence | `utils/storage-utils.js` |
 
-- [产品需求文档](docs/product-requirements.md)
-- [技术架构文档](docs/technical-architecture.md)
-- [Mock 数据设计](docs/mock-data-design.md)
-- [手动测试清单](docs/manual-test-checklist.md)
-- [Vibe Coding 文案](docs/vibe-coding-pitch.md)
+### Tech Stack
 
-## 📝 License
+- **Framework**: WeChat Mini Program (native)
+- **Data**: Mock data + `wx.setStorageSync` local cache
+- **Theming**: CSS variables + Behavior mixins
+- **Components**: Pure presentational, communicate via `properties` / `triggerEvent`
+- **API Layer**: Unified request wrapper with interceptors, cache, retry, cancellation
 
-MIT License
+## Project Structure
+
+```
+freshkeeper/
+├── app.js / app.json / app.wxss    # Entry point
+├── pages/              # 10 pages
+├── components/         # 22 reusable components
+├── services/           # Business service layer
+│   └── api/            # HTTP API layer
+├── utils/              # Utility functions
+├── assets/             # Static resources
+├── docs/               # Documentation
+└── tests/              # Test cases
+```
+
+See [Data Model Documentation](docs/data-model.md) for detailed schema and category system.
+
+## Documentation
+
+- [Product Requirements](docs/product-requirements.md)
+- [Technical Architecture](docs/technical-architecture.md)
+- [Data Model](docs/data-model.md)
+- [Mock Data Design](docs/mock-data-design.md)
+- [Manual Test Checklist](docs/manual-test-checklist.md)
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feat/my-feature`
+3. Commit your changes: `git commit -m 'feat: add my feature'`
+4. Push to the branch: `git push origin feat/my-feature`
+5. Open a Pull Request
+
+## License
+
+[MIT](LICENSE)

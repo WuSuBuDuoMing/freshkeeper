@@ -2,6 +2,7 @@
  * 冰箱食材列表页
  */
 const { ThemeBehavior } = require('../../utils/theme-behavior')
+const { debounce } = require('../../utils/performance-utils')
 const foodService = require('../../services/food-service')
 const { CATEGORIES, STATUS_LIST } = require('../../utils/food-utils')
 
@@ -23,10 +24,13 @@ Page(Behaviors({
 
   onLoad() {
     this._loadFoods()
+    this._debouncedSearch = debounce(() => this._applyFilters(), 200)
   },
 
   onShow() {
-    this._loadFoods()
+    if (this.data.foods.length === 0) {
+      this._loadFoods()
+    }
   },
 
   _loadFoods() {
@@ -88,7 +92,7 @@ Page(Behaviors({
 
   onSearchInput(e) {
     this.setData({ searchKeyword: e.detail.value })
-    this._applyFilters()
+    this._debouncedSearch()
   },
 
   onSearchClear() {

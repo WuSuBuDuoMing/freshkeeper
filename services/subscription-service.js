@@ -47,7 +47,7 @@ function requestSubscribe(templateKey) {
       tmplIds: [template.id],
       success: (res) => {
         const result = res[template.id] || 'reject'
-        console.log(`[Subscription] ${templateKey} 授权结果:`, result)
+        // 授权结果已记录
         resolve(result)
       },
       fail: (err) => {
@@ -97,7 +97,7 @@ async function requestAllSubscriptions() {
  * @returns {Promise<Object>} 发送结果
  */
 async function sendExpiryNotification(data) {
-  console.log('[Subscription] 发送到期提醒:', data)
+  // 发送到期提醒
 
   if (!TEMPLATES.expiryReminder.id) {
     // Mock 模式：直接显示本地通知
@@ -121,7 +121,7 @@ async function sendExpiryNotification(data) {
  * @returns {Promise<Object>} 发送结果
  */
 async function sendShoppingNotification(data) {
-  console.log('[Subscription] 发送采购提醒:', data)
+  // 发送采购提醒
 
   if (!TEMPLATES.shoppingReminder.id) {
     wx.showModal({
@@ -143,7 +143,7 @@ async function sendShoppingNotification(data) {
  * @returns {Promise<Object>} 发送结果
  */
 async function sendWeeklyReport(data) {
-  console.log('[Subscription] 发送周报:', data)
+  // 发送周报
 
   if (!TEMPLATES.weeklyReport.id) {
     wx.showModal({
