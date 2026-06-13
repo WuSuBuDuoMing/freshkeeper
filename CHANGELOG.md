@@ -1,5 +1,12 @@
 # Changelog
 
+## v2.2.0 — Local Optimization & Documentation (2026-06-14)
+
+### Changed
+- Local optimization and performance improvements
+- CHANGELOG sync and version alignment
+- Documentation updates across project
+
 ## v2.1.0 — Quality Optimization (2026-06-11)
 
 ### Documentation
