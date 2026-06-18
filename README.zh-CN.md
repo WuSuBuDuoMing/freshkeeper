@@ -1,3 +1,5 @@
+[![Version](https://img.shields.io/badge/version-v2.9.0-green)](https://github.com/WuSuBuDuoMing/freshkeeper/releases)
+
 # AI 冰箱食材管理助手
 
 > 帮助用户管理冰箱食材、过期提醒、采购清单和 AI 菜谱推荐的微信小程序

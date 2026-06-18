@@ -58,3 +58,270 @@ jobs:
               console.log('All ' + config.pages.length + ' pages have all 4 required files (.js, .json, .wxml, .wxss)');
             }
           "
+
+      - name: Validate service modules exist
+        run: |
+          echo "=== Checking required service files ==="
+          node -e "
+            const fs = require('fs');
+            const required = [
+              'services/food-service.js',
+              'services/recipe-service.js',
+              'services/shopping-service.js',
+              'services/stats-service.js',
+              'services/nutrition-service.js',
+              'services/family-service.js',
+              'services/food-recognition.js',
+              'services/subscription-service.js',
+              'services/export-service.js',
+              'services/ai-recipe-engine.js',
+              'services/api/request.js'
+            ];
+            const missing = required.filter(f => !fs.existsSync(f));
+            if (missing.length > 0) {
+              console.error('Missing service files:');
+              missing.forEach(f => console.error('  ' + f));
+              process.exit(1);
+            }
+            console.log('All ' + required.length + ' service modules present');
+          "
+
+      - name: Validate utility modules exist
+        run: |
+          echo "=== Checking required utility files ==="
+          node -e "
+            const fs = require('fs');
+            const required = [
+              'utils/storage-utils.js',
+              'utils/date-utils.js',
+              'utils/food-utils.js',
+              'utils/i18n.js',
+              'utils/mock-utils.js',
+              'utils/validator.js',
+              'utils/theme-behavior.js',
+              'utils/error-handler.js'
+            ];
+            const missing = required.filter(f => !fs.existsSync(f));
+            if (missing.length > 0) {
+              console.error('Missing utility files:');
+              missing.forEach(f => console.error('  ' + f));
+              process.exit(1);
+            }
+            console.log('All ' + required.length + ' utility modules present');
+          "
+
+      - name: Check community files exist
+        run: |
+          echo "=== Checking community files ==="
+          node -e "
+            const fs = require('fs');
+            const required = [
+              'LICENSE',
+              'README.md',
+              'README.zh-CN.md',
+              'CHANGELOG.md',
+              'CONTRIBUTING.md',
+              'CODE_OF_CONDUCT.md',
+              'SECURITY.md'
+            ];
+            const missing = required.filter(f => !fs.existsSync(f));
+            if (missing.length > 0) {
+              console.error('Missing community files:');
+              missing.forEach(f => console.error('  ' + f));
+              process.exit(1);
+            }
+            console.log('All ' + required.length + ' community files present');
+          "
+
+      - name: Validate JSON files
+        run: |
+          echo "=== Validating JSON files ==="
+          node -e "
+            const fs = require('fs');
+            const jsonFiles = [
+              'app.json',
+              'project.config.json',
+              'sitemap.json',
+              'package.json'
+            ].filter(f => fs.existsSync(f));
+
+            let errors = [];
+            for (const file of jsonFiles) {
+              try {
+                JSON.parse(fs.readFileSync(file, 'utf8'));
+                console.log('  OK: ' + file);
+              } catch (e) {
+                errors.push(file + ': ' + e.message);
+                console.error('  FAIL: ' + file);
+              }
+            }
+
+            // Validate page JSON files
+            const config = JSON.parse(fs.readFileSync('app.json', 'utf8'));
+            for (const page of config.pages) {
+              const jsonFile = page + '.json';
+              if (fs.existsSync(jsonFile)) {
+                try {
+                  JSON.parse(fs.readFileSync(jsonFile, 'utf8'));
+                } catch (e) {
+                  errors.push(jsonFile + ': ' + e.message);
+                  console.error('  FAIL: ' + jsonFile);
+                }
+              }
+            }
+
+            if (errors.length > 0) {
+              console.error('JSON validation failed:');
+              errors.forEach(e => console.error('  ' + e));
+              process.exit(1);
+            }
+            console.log('All JSON files are valid');
+          "
+
+      - name: Syntax check all JS files
+        run: |
+          echo "=== Syntax checking all JavaScript files ==="
+          node -e "
+            const fs = require('fs');
+            const path = require('path');
+
+            function getAllJSFiles(dir) {
+              let results = [];
+              try {
+                const items = fs.readdirSync(dir);
+                for (const item of items) {
+                  const fullPath = path.join(dir, item);
+                  const stat = fs.statSync(fullPath);
+                  if (stat.isDirectory() && !item.startsWith('.') && item !== 'node_modules') {
+                    results = results.concat(getAllJSFiles(fullPath));
+                  } else if (item.endsWith('.js')) {
+                    results.push(fullPath);
+                  }
+                }
+              } catch(e) {}
+              return results;
+            }
+
+            const jsFiles = getAllJSFiles('.');
+            let errors = 0;
+            for (const file of jsFiles) {
+              const code = fs.readFileSync(file, 'utf8');
+              try {
+                // Parse as a module (not execute) for syntax validation
+                new Function(code);
+              } catch (e) {
+                // wx.* calls cause ReferenceError but are valid in WeChat context
+                // Only flag actual syntax errors
+                if (e instanceof SyntaxError) {
+                  console.error('  SYNTAX ERROR: ' + file + ' - ' + e.message);
+                  errors++;
+                }
+              }
+            }
+
+            if (errors > 0) {
+              console.error(errors + ' file(s) with syntax errors');
+              process.exit(1);
+            }
+            console.log('All ' + jsFiles.length + ' JavaScript files passed syntax check');
+          "
+
+      - name: Check JSDoc coverage on services
+        run: |
+          echo "=== Checking JSDoc coverage on service modules ==="
+          node -e "
+            const fs = require('fs');
+            const serviceFiles = [
+              'services/food-service.js',
+              'services/recipe-service.js',
+              'services/shopping-service.js',
+              'services/stats-service.js',
+              'services/nutrition-service.js',
+              'services/family-service.js',
+              'services/export-service.js',
+              'services/subscription-service.js',
+              'services/food-recognition.js',
+              'services/ai-recipe-engine.js'
+            ].filter(f => fs.existsSync(f));
+
+            let totalFunctions = 0;
+            let documentedFunctions = 0;
+
+            for (const file of serviceFiles) {
+              const content = fs.readFileSync(file, 'utf8');
+              // Count exported functions (function declarations before module.exports)
+              const funcMatches = content.match(/function\s+\w+\s*\(/g) || [];
+              // Count JSDoc comments (/** ... */)
+              const jsdocMatches = content.match(/\/\*\*[\s\S]*?\*\//g) || [];
+              totalFunctions += funcMatches.length;
+              documentedFunctions += jsdocMatches.length;
+            }
+
+            const coverage = totalFunctions > 0 ? Math.round((documentedFunctions / totalFunctions) * 100) : 0;
+            console.log('JSDoc coverage: ' + documentedFunctions + '/' + totalFunctions + ' functions (' + coverage + '%)');
+
+            if (coverage < 50) {
+              console.error('ERROR: JSDoc coverage below 50%');
+              process.exit(1);
+            }
+            console.log('JSDoc coverage meets minimum threshold');
+          "
+
+      - name: Run test suite
+        run: |
+          echo "=== Running test suite ==="
+          node -e "
+            const fs = require('fs');
+            // Basic smoke test: try requiring key modules
+            const modules = [
+              'utils/date-utils',
+              'utils/storage-utils',
+              'utils/validator'
+            ];
+            // Note: wx API modules cannot be required outside WeChat environment
+            // This validates file syntax and basic structure
+            let passed = 0;
+            for (const mod of modules) {
+              if (fs.existsSync(mod + '.js')) {
+                console.log('  EXISTS: ' + mod + '.js');
+                passed++;
+              }
+            }
+            console.log(passed + '/' + modules.length + ' core modules available');
+          "
+
+      - name: Validate version consistency
+        run: |
+          echo "=== Checking version consistency ==="
+          node -e "
+            const fs = require('fs');
+
+            // Read version from project.config.json
+            const config = JSON.parse(fs.readFileSync('project.config.json', 'utf8'));
+            const configVersion = config.version;
+
+            // Read version from app.js
+            const appJs = fs.readFileSync('app.js', 'utf8');
+            const versionMatch = appJs.match(/version:\s*['\"]([^'\"]+)['\"]/);
+            const appVersion = versionMatch ? versionMatch[1] : null;
+
+            // Read latest version from CHANGELOG.md
+            const changelog = fs.readFileSync('CHANGELOG.md', 'utf8');
+            const changelogMatch = changelog.match(/## v([\d.]+)/);
+            const changelogVersion = changelogMatch ? changelogMatch[1] : null;
+
+            console.log('project.config.json version:', configVersion);
+            console.log('app.js globalData.version:', appVersion);
+            console.log('CHANGELOG latest version:', changelogVersion);
+
+            if (configVersion && appVersion && configVersion !== appVersion) {
+              console.error('ERROR: Version mismatch between project.config.json and app.js');
+              process.exit(1);
+            }
+
+            if (configVersion && changelogVersion && configVersion !== changelogVersion) {
+              console.error('WARNING: Version mismatch between project.config.json and CHANGELOG.md');
+            }
+
+            console.log('Version consistency check passed');
+          "

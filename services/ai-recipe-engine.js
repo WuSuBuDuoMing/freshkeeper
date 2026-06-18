@@ -1,12 +1,27 @@
 /**
- * AI 菜谱生成引擎
- * 支持真实 API 和 mock 两种模式
+ * @file AI Recipe Generation Engine
+ * @description Generates recipe recommendations using AI (or mock fallback) based on
+ *   current fridge contents. Supports real API integration (OpenAI-compatible) and
+ *   mock mode for offline development. Includes recipe scoring, caching, and
+ *   streaming support for real-time output.
+ * @module services/ai-recipe-engine
+ * @version 2.9.0
  */
 const storage = require('../utils/storage-utils')
 
-// AI 配置
+/**
+ * AI engine configuration.
+ * Toggle `useRealAPI` to switch between mock mode and a live LLM endpoint.
+ * @type {Object}
+ * @property {boolean} useRealAPI - Whether to call the real AI API (false = mock mode)
+ * @property {string} apiEndpoint - LLM API endpoint URL
+ * @property {string} apiKey - Bearer token for the API
+ * @property {string} model - Model identifier (e.g. 'gpt-3.5-turbo')
+ * @property {number} maxTokens - Maximum response tokens
+ * @property {number} temperature - Sampling temperature (0-2)
+ */
 const AI_CONFIG = {
-  useRealAPI: false, // 开关：切换真实 API / mock
+  useRealAPI: false, // Toggle: set to true to use a real AI API
   apiEndpoint: '',
   apiKey: '',
   model: 'gpt-3.5-turbo',
@@ -270,11 +285,17 @@ function scoreRecipe(recipe, foods) {
 }
 
 /**
- * 缓存管理
+ * In-memory TTL cache for generated recipes.
+ * @private
  */
 const CACHE_KEY = 'ai_recipe_cache'
-const CACHE_TTL = 30 * 60 * 1000 // 30分钟
+const CACHE_TTL = 30 * 60 * 1000 // 30 minutes
 
+/**
+ * Retrieve a cached recipe result by key, if still within TTL.
+ * @param {string} cacheKey - The cache lookup key
+ * @returns {Array|null} Cached recipe array, or null if expired / missing
+ */
 function getCachedRecipe(cacheKey) {
   const cache = storage.get(CACHE_KEY, {})
   const item = cache[cacheKey]
@@ -284,6 +305,11 @@ function getCachedRecipe(cacheKey) {
   return null
 }
 
+/**
+ * Store a recipe result in the TTL cache and purge expired entries.
+ * @param {string} cacheKey - The cache key
+ * @param {Array} data - Recipe data to cache
+ */
 function setCachedRecipe(cacheKey, data) {
   const cache = storage.get(CACHE_KEY, {})
   cache[cacheKey] = { data, timestamp: Date.now() }

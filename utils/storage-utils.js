@@ -1,23 +1,35 @@
 /**
- * 本地存储工具
+ * @file Local Storage Utility - Namespaced wrapper around wx.setStorageSync.
+ * @description Provides a unified storage API with automatic key namespacing (fridge_ prefix),
+ *   error handling, and bulk operations for the FreshKeeper application.
+ * @module utils/storage-utils
+ * @version 2.9.0
  */
 
+/** @private Key prefix to namespace all FreshKeeper storage keys */
 const STORAGE_PREFIX = 'fridge_'
 
 /**
- * 生成存储键
- * @param {string} key
- * @returns {string}
+ * Build the namespaced storage key.
+ * All keys are prefixed with `fridge_` to avoid collisions with other mini programs.
+ * @param {string} key - Raw key name
+ * @returns {string} Namespaced key (e.g. 'fridge_foods')
+ * @private
  */
 function getKey(key) {
   return `${STORAGE_PREFIX}${key}`
 }
 
 /**
- * 获取存储数据
- * @param {string} key
- * @param {*} defaultValue
- * @returns {*}
+ * Retrieve a value from local storage.
+ * Returns `defaultValue` when the key does not exist or an error occurs.
+ * @param {string} key - Storage key (without prefix)
+ * @param {*} [defaultValue=null] - Fallback value if key is not found
+ * @returns {*} Stored value or defaultValue
+ *
+ * @example
+ * const foods = storage.get('foods', [])
+ * const count = storage.get('last_count', 0)
  */
 function get(key, defaultValue = null) {
   try {
@@ -30,10 +42,14 @@ function get(key, defaultValue = null) {
 }
 
 /**
- * 设置存储数据
- * @param {string} key
- * @param {*} value
- * @returns {boolean}
+ * Write a value to local storage.
+ * @param {string} key - Storage key (without prefix)
+ * @param {*} value - Value to store (must be JSON-serializable)
+ * @returns {boolean} true if write succeeded, false on error
+ *
+ * @example
+ * storage.set('foods', foodArray)
+ * storage.set('theme', 'dark')
  */
 function set(key, value) {
   try {
@@ -46,9 +62,12 @@ function set(key, value) {
 }
 
 /**
- * 删除存储数据
- * @param {string} key
- * @returns {boolean}
+ * Delete a single key from local storage.
+ * @param {string} key - Storage key (without prefix)
+ * @returns {boolean} true if deletion succeeded, false on error
+ *
+ * @example
+ * storage.remove('temp_cache')
  */
 function remove(key) {
   try {
@@ -61,7 +80,12 @@ function remove(key) {
 }
 
 /**
- * 清空所有本项目存储
+ * Clear ALL FreshKeeper storage keys (only those prefixed with `fridge_`).
+ * Other mini program data is left untouched.
+ * @returns {boolean} true if clear succeeded, false on error
+ *
+ * @example
+ * storage.clear() // Removes all fridge_* keys
  */
 function clear() {
   try {
@@ -79,8 +103,12 @@ function clear() {
 }
 
 /**
- * 获取存储信息
- * @returns {object}
+ * Get storage metadata (all keys, current size, and size limit).
+ * @returns {{keys: string[], currentSize: number, limitSize: number}} Storage info object
+ *
+ * @example
+ * const info = storage.getInfo()
+ * console.log(`Using ${info.currentSize}KB of ${info.limitSize}KB`)
  */
 function getInfo() {
   try {

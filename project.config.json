@@ -40,6 +40,7 @@
   "libVersion": "3.3.4",
   "appid": "wx0000000000000000",
   "projectname": "AI冰箱食材管理助手",
+  "version": "2.9.0",
   "condition": {},
   "editorSetting": {
     "tabIndent": "insertSpaces",

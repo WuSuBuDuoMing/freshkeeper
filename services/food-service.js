@@ -1,6 +1,10 @@
 /**
- * 食材服务 - 管理所有食材的 CRUD 操作
- * 当前使用 mock 数据 + 本地缓存
+ * @file Food Service - Core CRUD and query operations for fridge food items.
+ * @description Manages all food items in the fridge including creation, updates,
+ *   deletion, expiry tracking, search, and statistics. Uses mock data with local
+ *   storage persistence. This is the primary data service for the application.
+ * @module services/food-service
+ * @version 2.9.0
  */
 const storage = require('../utils/storage-utils')
 const { generateId, getDateOffset } = require('../utils/mock-utils')

@@ -1,32 +1,47 @@
 /**
- * AI 冰箱食材管理助手 - 小程序入口
- * 帮助用户管理冰箱食材、过期提醒、采购清单和 AI 菜谱推荐
+ * @file AI Fridge Food Management Assistant - Mini Program Entry Point
+ * @description WeChat Mini Program for managing fridge inventory, tracking expiry dates,
+ *   building shopping lists, and providing AI-powered recipe recommendations.
+ *   Uses mock data + local storage for offline-first operation.
+ * @module app
+ * @version 2.9.0
  */
 const { initMockData } = require('./services/food-service')
 const { getThemeMode } = require('./utils/theme-behavior')
 
 App({
+  /**
+   * Lifecycle hook called when the Mini Program is first launched.
+   * Initializes mock data, retrieves system info, and sets theme mode.
+   */
   onLaunch() {
-    // 初始化 mock 数据
+    // Initialize mock data on first launch
     initMockData()
 
-    // 获取系统信息
+    // Retrieve system information for responsive layout
     const systemInfo = wx.getSystemInfoSync()
     this.globalData.systemInfo = systemInfo
     this.globalData.statusBarHeight = systemInfo.statusBarHeight || 20
     this.globalData.isIOS = systemInfo.platform === 'ios'
 
-    // 获取主题模式
+    // Apply saved theme preference
     const themeMode = getThemeMode()
     this.globalData.themeMode = themeMode
   },
 
+  /** @type {Object} Global application data shared across all pages */
   globalData: {
+    /** @type {Object|null} System information from wx.getSystemInfoSync() */
     systemInfo: null,
+    /** @type {number} Status bar height in pixels */
     statusBarHeight: 20,
+    /** @type {boolean} Whether the device runs iOS */
     isIOS: false,
-    themeMode: 'light', // light | dark
+    /** @type {'light'|'dark'} Current theme mode */
+    themeMode: 'light',
+    /** @type {Object|null} Current user info */
     userInfo: null,
-    version: '2.1.0'
+    /** @type {string} Application version */
+    version: '2.9.0'
   }
 })
