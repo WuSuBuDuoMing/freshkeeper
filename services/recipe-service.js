@@ -1,6 +1,10 @@
 /**
- * 菜谱服务 - AI 菜谱推荐 mock
- * 基于冰箱现有食材生成菜谱推荐
+ * @file Recipe Service - AI-powered recipe recommendation engine.
+ * @description Provides recipe suggestions based on current fridge contents,
+ *   with smart scoring that prioritizes expiring ingredients. Generates weekly
+ *   meal plans with breakfast/lunch/dinner assignments.
+ * @module services/recipe-service
+ * @version 2.9.0
  */
 const storage = require('../utils/storage-utils')
 const { generateId, randomPick, randomPickN } = require('../utils/mock-utils')

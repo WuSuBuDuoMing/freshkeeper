@@ -1,12 +1,27 @@
 /**
- * AI 菜谱生成引擎
- * 支持真实 API 和 mock 两种模式
+ * @file AI Recipe Generation Engine
+ * @description Generates recipe recommendations using AI (or mock fallback) based on
+ *   current fridge contents. Supports real API integration (OpenAI-compatible) and
+ *   mock mode for offline development. Includes recipe scoring, caching, and
+ *   streaming support for real-time output.
+ * @module services/ai-recipe-engine
+ * @version 2.9.0
  */
 const storage = require('../utils/storage-utils')
 
-// AI 配置
+/**
+ * AI engine configuration.
+ * Toggle `useRealAPI` to switch between mock mode and a live LLM endpoint.
+ * @type {Object}
+ * @property {boolean} useRealAPI - Whether to call the real AI API (false = mock mode)
+ * @property {string} apiEndpoint - LLM API endpoint URL
+ * @property {string} apiKey - Bearer token for the API
+ * @property {string} model - Model identifier (e.g. 'gpt-3.5-turbo')
+ * @property {number} maxTokens - Maximum response tokens
+ * @property {number} temperature - Sampling temperature (0-2)
+ */
 const AI_CONFIG = {
-  useRealAPI: false, // 开关：切换真实 API / mock
+  useRealAPI: false, // Toggle: set to true to use a real AI API
   apiEndpoint: '',
   apiKey: '',
   model: 'gpt-3.5-turbo',
@@ -320,29 +335,4 @@ async function generateRecipes(foods, options = {}) {
     return cached
   }
 
-  // 构建 prompt 并调用 AI
-  const prompt = buildRecipePrompt(foods, options)
-  const recipes = await callAIAPI(prompt)
-
-  // 评分并排序
-  const scored = recipes.map(r => scoreRecipe(r, foods))
-  scored.sort((a, b) => b.totalScore - a.totalScore)
-
-  // 写入缓存
-  setCachedRecipe(cacheKey, scored)
-
-  return scored
-}
-
-module.exports = {
-  AI_CONFIG,
-  buildRecipePrompt,
-  callAIAPI,
-  callAIStream,
-  generateMockRecipes,
-  scoreRecipe,
-  getCachedRecipe,
-  setCachedRecipe,
-  generateCacheKey,
-  generateRecipes
-}
+  // 构建 p

@@ -1,6 +1,10 @@
 /**
- * 采购清单服务
- * 管理采购清单的增删改查
+ * @file Shopping List Service - Complete shopping list management.
+ * @description Handles shopping list CRUD, category grouping, cost estimation,
+ *   and automatic replenishment suggestions from used food items. Supports
+ *   batch operations and purchase tracking.
+ * @module services/shopping-service
+ * @version 2.9.0
  */
 const storage = require('../utils/storage-utils')
 const { generateId, randomInt } = require('../utils/mock-utils')

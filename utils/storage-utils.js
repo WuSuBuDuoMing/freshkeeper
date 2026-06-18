@@ -1,5 +1,9 @@
 /**
- * 本地存储工具
+ * @file Local Storage Utility - Namespaced wrapper around wx.setStorageSync.
+ * @description Provides a unified storage API with automatic key namespacing (fridge_ prefix),
+ *   error handling, and bulk operations for the FreshKeeper application.
+ * @module utils/storage-utils
+ * @version 2.9.0
  */
 
 const STORAGE_PREFIX = 'fridge_'

@@ -1,5 +1,10 @@
 /**
- * 日期工具函数
+ * @file Date Utility Functions
+ * @description Comprehensive date formatting, calculation, and comparison utilities
+ *   for the FreshKeeper application. Handles expiry date calculations, relative time
+ *   display, week date generation, and locale-aware Chinese date formatting.
+ * @module utils/date-utils
+ * @version 2.9.0
  */
 
 /**

@@ -1,6 +1,10 @@
 /**
- * 统计服务 - 数据分析和报表
- * 基于 mock 数据生成统计分析
+ * @file Statistics & Analytics Service
+ * @description Provides data analysis, category distribution, expiry trends,
+ *   waste tracking, savings tips, and monthly reports for fridge management
+ *   insights. Uses mock data for demonstration purposes.
+ * @module services/stats-service
+ * @version 2.9.0
  */
 const storage = require('../utils/storage-utils')
 const { randomInt, getDateOffset } = require('../utils/mock-utils')

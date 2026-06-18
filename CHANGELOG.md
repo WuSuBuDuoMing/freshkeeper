@@ -1,5 +1,37 @@
 # Changelog
 
+## v2.9.0 — Community Docs & README Overhaul (2026-06-18)
+
+### Documentation
+- Complete English README overhaul with Table of Contents, feature table, architecture section, installation guide, project structure, and configuration docs
+- Added CONTRIBUTING.md with development workflow, commit convention, PR process, and style guide
+- Upgraded CODE_OF_CONDUCT.md to full Contributor Covenant v2.0
+- Enhanced SECURITY.md with supported versions table, reporting process, scope, and best practices
+- Updated README.zh-CN.md with version badge
+
+### CI/CD
+- Expanded GitHub Actions CI pipeline with 5 new validation steps: service modules, utility modules, community files, JSON file validation, and test suite smoke tests
+
+### Code Quality
+- Enhanced JSDoc annotations on all core service files (food-service, recipe-service, shopping-service, ai-recipe-engine, stats-service) and utility modules (storage-utils, date-utils)
+- Added `@file`, `@module`, `@version` metadata to all key modules
+- Upgraded app.js with comprehensive JSDoc and English comments
+
+## v2.8.0 — Code Quality & JSDoc Enhancement (2026-06-17)
+
+### Changed
+- Added JSDoc documentation to API layer (request.js, config.js, interceptors.js)
+- Added JSDoc documentation to nutrition-service.js, family-service.js, food-recognition.js, subscription-service.js, export-service.js
+- Improved inline comments across service layer for better code readability
+
+## v2.7.0 — Architecture Refinement (2026-06-16)
+
+### Changed
+- Improved API layer with unified request interceptor pattern
+- Enhanced error handling across all services
+- Updated service module exports for better tree-shaking
+- Performance optimizations for food list rendering
+
 ## v2.6.0 — Community Governance & Funding (2026-06-16)
 
 ### Changed
