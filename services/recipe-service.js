@@ -2,9 +2,10 @@
  * @file Recipe Service - AI-powered recipe recommendation engine.
  * @description Provides recipe suggestions based on current fridge contents,
  *   with smart scoring that prioritizes expiring ingredients. Generates weekly
- *   meal plans with breakfast/lunch/dinner assignments.
+ *   meal plans with breakfast/lunch/dinner assignments. Supports user preference
+ *   tracking and seasonal-aware recommendations.
  * @module services/recipe-service
- * @version 2.9.0
+ * @version 2.12.0
  */
 const storage = require('../utils/storage-utils')
 const { generateId, randomPick, randomPickN } = require('../utils/mock-utils')
