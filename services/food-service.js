@@ -1,10 +1,11 @@
 /**
  * @file Food Service - Core CRUD and query operations for fridge food items.
  * @description Manages all food items in the fridge including creation, updates,
- *   deletion, expiry tracking, search, and statistics. Uses mock data with local
- *   storage persistence. This is the primary data service for the application.
+ *   deletion, expiry tracking, search, batch operations, and statistics. Uses mock
+ *   data with local storage persistence. This is the primary data service for the
+ *   application.
  * @module services/food-service
- * @version 2.9.0
+ * @version 2.12.0
  */
 const storage = require('../utils/storage-utils')
 const { generateId, getDateOffset } = require('../utils/mock-utils')
@@ -255,6 +256,144 @@ function getTodayTasks() {
 }
 
 /**
+ * 获取分级过期预警（智能分级 + 处理建议）
+ * @returns {{ today: Array, tomorrow: Array, threeDay: Array, sevenDay: Array, expired: Array }}
+ */
+function getTieredExpiryAlerts() {
+  const foods = getAllFoods().filter(f => f.status !== 'used')
+  const now = new Date()
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+
+  const daysLeft = (expiryDate) => {
+    const e = new Date(expiryDate)
+    const ed = new Date(e.getFullYear(), e.getMonth(), e.getDate())
+    return Math.ceil((ed - today) / (1000 * 60 * 60 * 24))
+  }
+
+  const enriched = foods.map(f => ({
+    ...f,
+    daysLeft: daysLeft(f.expiryDate),
+    suggestion: getSuggestion(daysLeft(f.expiryDate), f.category)
+  }))
+
+  return {
+    today: enriched.filter(f => f.daysLeft === 0),
+    tomorrow: enriched.filter(f => f.daysLeft === 1),
+    threeDay: enriched.filter(f => f.daysLeft > 1 && f.daysLeft <= 3),
+    sevenDay: enriched.filter(f => f.daysLeft > 3 && f.daysLeft <= 7),
+    expired: enriched.filter(f => f.daysLeft < 0)
+  }
+}
+
+/**
+ * 根据剩余天数和食材分类生成处理建议
+ * @param {number} daysLeft 剩余天数（负数表示已过期）
+ * @param {string} category 食材分类
+ * @returns {string} 处理建议文本
+ */
+function getSuggestion(daysLeft, category) {
+  if (daysLeft < -3) return '已过期超过3天，建议立即丢弃'
+  if (daysLeft < 0) return '已过期，建议尽快处理或丢弃'
+  if (daysLeft === 0) return '今天到期，建议立即使用'
+  if (daysLeft === 1) return '明天到期，建议优先安排使用'
+  if (daysLeft <= 3) {
+    const quickCategories = ['蔬菜', '水果', '海鲜']
+    return quickCategories.includes(category)
+      ? '保质期短，建议尽快使用'
+      : '3天内到期，可安排近期使用'
+  }
+  return '新鲜状态，正常管理即可'
+}
+
+/**
+ * 批量标记食材为已用完
+ * @param {Array<string>} ids 食材 ID 列表
+ * @returns {{ success: number, failed: number }} 操作结果
+ */
+function batchMarkAsUsed(ids) {
+  const foods = getAllFoods()
+  let success = 0
+  let failed = 0
+
+  const updated = foods.map(f => {
+    if (ids.includes(f.id)) {
+      success++
+      return { ...f, status: 'used', quantity: 0, updatedAt: new Date().toISOString() }
+    }
+    failed++
+    return f
+  })
+
+  if (success > 0) {
+    storage.set(STORAGE_KEY, updated)
+  }
+
+  return { success, failed }
+}
+
+/**
+ * 批量删除过期食材
+ * @returns {number} 删除数量
+ */
+function batchDeleteExpired() {
+  const foods = getAllFoods()
+  const now = new Date()
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+
+  const remaining = foods.filter(f => {
+    if (f.status === 'used') return true
+    const expiry = new Date(f.expiryDate)
+    const expiryDay = new Date(expiry.getFullYear(), expiry.getMonth(), expiry.getDate())
+    return expiryDay >= today
+  })
+
+  const deletedCount = foods.length - remaining.length
+  if (deletedCount > 0) {
+    storage.set(STORAGE_KEY, remaining)
+  }
+
+  return deletedCount
+}
+
+/**
+ * 获取即将过期食材的统计摘要
+ * @returns {object} 各等级数量 + 总浪费预估
+ */
+function getExpirySummary() {
+  const foods = getAllFoods().filter(f => f.status !== 'used')
+  const now = new Date()
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+
+  let todayCount = 0
+  let soonCount = 0
+  let weekCount = 0
+  let expiredCount = 0
+  let wastedValueEstimate = 0
+
+  foods.forEach(f => {
+    const expiry = new Date(f.expiryDate)
+    const expiryDay = new Date(expiry.getFullYear(), expiry.getMonth(), expiry.getDate())
+    const diff = Math.ceil((expiryDay - today) / (1000 * 60 * 60 * 24))
+
+    if (diff < 0) {
+      expiredCount++
+      wastedValueEstimate += 15 // mock 平均浪费价值
+    } else if (diff === 0) todayCount++
+    else if (diff <= 3) soonCount++
+    else if (diff <= 7) weekCount++
+  })
+
+  return {
+    todayCount,
+    soonCount,
+    weekCount,
+    expiredCount,
+    totalNeedAttention: todayCount + soonCount + expiredCount,
+    wastedValueEstimate
+  }
+}
+
+/**
  * 生成 50+ 条 mock 食材数据
  */
 function generateMockFoods() {
@@ -382,5 +521,10 @@ module.exports = {
   searchFoods,
   getCategoryStats,
   getOverview,
-  getTodayTasks
+  getTodayTasks,
+  getTieredExpiryAlerts,
+  getSuggestion,
+  batchMarkAsUsed,
+  batchDeleteExpired,
+  getExpirySummary
 }

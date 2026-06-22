@@ -1,5 +1,10 @@
 /**
- * 食材工具函数
+ * @file Food Utility Functions
+ * @description Comprehensive food management helpers including category/area/status
+ *   enumerations, food status calculation, grouping, searching, sorting, and
+ *   emoji/icon mappings for the FreshKeeper application.
+ * @module utils/food-utils
+ * @version 2.12.0
  */
 
 /**
