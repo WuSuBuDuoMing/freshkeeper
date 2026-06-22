@@ -16,11 +16,22 @@
     <!-- 今日过期 -->
     <view class="expiry-section" wx:if="{{todayExpiring.length > 0}}">
       <view class="section-header">
-        <text class="section-icon">🟡</text>
+        <text class="section-icon">🟠</text>
         <text class="section-title">今日过期</text>
-        <text class="section-count warning">{{todayExpiring.length}}</text>
+        <text class="section-count danger">{{todayExpiring.length}}</text>
       </view>
       <food-card wx:for="{{todayExpiring}}" wx:key="id" food="{{item}}" compact="{{true}}"
+        bind:useup="onUseUp" bind:addtoshopping="onAddToShopping" bind:delete="onDelete" />
+    </view>
+
+    <!-- 明日过期 -->
+    <view class="expiry-section" wx:if="{{tomorrowExpiring.length > 0}}">
+      <view class="section-header">
+        <text class="section-icon">🟡</text>
+        <text class="section-title">明日过期</text>
+        <text class="section-count warning">{{tomorrowExpiring.length}}</text>
+      </view>
+      <food-card wx:for="{{tomorrowExpiring}}" wx:key="id" food="{{item}}" compact="{{true}}"
         bind:useup="onUseUp" bind:addtoshopping="onAddToShopping" bind:delete="onDelete" />
     </view>
 
@@ -48,7 +59,7 @@
 
     <!-- 全部为空 -->
     <empty-state
-      wx:if="{{alreadyExpired.length === 0 && todayExpiring.length === 0 && threeDayExpiring.length === 0 && sevenDayExpiring.length === 0}}"
+      wx:if="{{alreadyExpired.length === 0 && todayExpiring.length === 0 && tomorrowExpiring.length === 0 && threeDayExpiring.length === 0 && sevenDayExpiring.length === 0}}"
       icon="🎉"
       title="太棒了！"
       desc="目前没有需要处理的食材"

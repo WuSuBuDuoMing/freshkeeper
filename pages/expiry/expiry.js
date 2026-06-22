@@ -2,9 +2,9 @@
  * @file Expiry Alerts Page
  * @description Displays tiered expiry warnings with batch operations support.
  *   Users can mark items as used, add to shopping list, or delete in bulk.
- *   Supports 5-tier alert levels: expired / today / tomorrow / 3-day / 7-day.
+ *   Supports 6-tier alert levels: expired / today / tomorrow / 3-day / 7-day.
  * @module pages/expiry
- * @version 2.12.0
+ * @version 2.15.0
  */
 const { ThemeBehavior } = require('../../utils/theme-behavior')
 const foodService = require('../../services/food-service')
@@ -14,14 +14,16 @@ Page(Behaviors({
   mixins: [ThemeBehavior],
 
   data: {
-    /** @type {Array} 今日过期食材 */
-    todayExpiring: [],
-    /** @type {Array} 3天内过期食材 */
-    threeDayExpiring: [],
-    /** @type {Array} 7天内过期食材 */
-    sevenDayExpiring: [],
     /** @type {Array} 已过期食材 */
     alreadyExpired: [],
+    /** @type {Array} 今日过期食材 */
+    todayExpiring: [],
+    /** @type {Array} 明日过期食材 */
+    tomorrowExpiring: [],
+    /** @type {Array} 3天内过期食材（不含今日/明日） */
+    threeDayExpiring: [],
+    /** @type {Array} 7天内过期食材（不含3天内） */
+    sevenDayExpiring: [],
     /** @type {boolean} 加载状态 */
     loading: true,
     /** @type {boolean} 批量选择模式 */
@@ -45,10 +47,11 @@ Page(Behaviors({
     const expirySummary = foodService.getExpirySummary()
 
     this.setData({
+      alreadyExpired: alerts.expired,
       todayExpiring: alerts.today,
+      tomorrowExpiring: alerts.tomorrow,
       threeDayExpiring: alerts.threeDay,
       sevenDayExpiring: alerts.sevenDay,
-      alreadyExpired: alerts.expired,
       expirySummary,
       loading: false,
       batchMode: false,

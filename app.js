@@ -4,7 +4,7 @@
  *   building shopping lists, and providing AI-powered recipe recommendations.
  *   Uses mock data + local storage for offline-first operation.
  * @module app
- * @version 2.9.0
+ * @version 2.15.0
  */
 const { initMockData } = require('./services/food-service')
 const { getThemeMode } = require('./utils/theme-behavior')
@@ -42,6 +42,6 @@ App({
     /** @type {Object|null} Current user info */
     userInfo: null,
     /** @type {string} Application version */
-    version: '2.9.0'
+    version: '2.15.0'
   }
 })

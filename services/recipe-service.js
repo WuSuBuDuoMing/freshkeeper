@@ -5,7 +5,7 @@
  *   meal plans with breakfast/lunch/dinner assignments. Supports user preference
  *   tracking and seasonal-aware recommendations.
  * @module services/recipe-service
- * @version 2.12.0
+ * @version 2.15.0
  */
 const storage = require('../utils/storage-utils')
 const { generateId, randomPick, randomPickN } = require('../utils/mock-utils')

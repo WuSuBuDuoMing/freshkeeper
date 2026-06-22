@@ -1,7 +1,10 @@
 /**
- * @file 营养追踪服务
- * @description 追踪食材营养信息和每日摄入，提供营养分析、周报和饮食建议
+ * @file Nutrition Tracking Service
+ * @description Tracks food nutritional information and daily intake, providing
+ *   nutrition analysis, weekly reports, and dietary advice. Uses a built-in
+ *   nutrition database for common Chinese ingredients.
  * @module services/nutrition-service
+ * @version 2.15.0
  */
 
 const storage = require('../utils/storage-utils')

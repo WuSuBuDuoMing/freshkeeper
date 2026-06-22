@@ -1,7 +1,11 @@
 /**
- * @file food-recognition.js
- * @description 食材识别服务 - 支持拍照识别食材并自动录入冰箱
+ * @file Food Recognition Service
+ * @description Supports photo-based food recognition for automatic fridge inventory
+ *   entry. Provides real API integration (vision model) and mock fallback for
+ *   offline development. Includes batch recognition with deduplication and
+ *   automatic form data generation.
  * @module services/food-recognition
+ * @version 2.15.0
  */
 
 const imageUtils = require('../utils/image-utils')

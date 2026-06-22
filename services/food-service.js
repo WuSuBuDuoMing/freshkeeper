@@ -5,10 +5,11 @@
  *   data with local storage persistence. This is the primary data service for the
  *   application.
  * @module services/food-service
- * @version 2.12.0
+ * @version 2.15.0
  */
 const storage = require('../utils/storage-utils')
 const { generateId, getDateOffset } = require('../utils/mock-utils')
+const { daysUntilExpiry, isExpired, isExpiringSoon } = require('../utils/date-utils')
 
 const STORAGE_KEY = 'foods'
 
@@ -123,34 +124,25 @@ function markAsUsed(id) {
 
 /**
  * 获取即将过期的食材
- * @param {number} days 内
- * @returns {Array}
+ * @param {number} days 内（默认 3 天）
+ * @returns {Array} 指定天数内过期的活跃食材列表
  */
 function getExpiringFoods(days = 3) {
   const foods = getAllFoods()
   return foods.filter(f => {
     if (f.status === 'used') return false
-    const expiry = new Date(f.expiryDate)
-    const now = new Date()
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
-    const diff = Math.ceil((expiry - today) / (1000 * 60 * 60 * 24))
-    return diff >= 0 && diff <= days
+    const remaining = daysUntilExpiry(f.expiryDate)
+    return remaining >= 0 && remaining <= days
   })
 }
 
 /**
  * 获取已过期的食材
- * @returns {Array}
+ * @returns {Array} 已过期的活跃食材列表
  */
 function getExpiredFoods() {
   const foods = getAllFoods()
-  return foods.filter(f => {
-    if (f.status === 'used') return false
-    const expiry = new Date(f.expiryDate)
-    const now = new Date()
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
-    return expiry < today
-  })
+  return foods.filter(f => f.status !== 'used' && isExpired(f.expiryDate))
 }
 
 /**
@@ -202,25 +194,21 @@ function getCategoryStats() {
 
 /**
  * 获取统计概览
- * @returns {object}
+ * @returns {object} 包含 total, expiredCount, expiringCount, freshCount, usedCount,
+ *   wastedValue, categoryStats 等字段
  */
 function getOverview() {
   const foods = getAllFoods()
   const active = foods.filter(f => f.status !== 'used')
-  const today = getDateOffset(0)
-  const now = new Date()
-  const todayDate = new Date(now.getFullYear(), now.getMonth(), now.getDate())
 
   let expiredCount = 0
   let expiringCount = 0
   let freshCount = 0
 
   active.forEach(f => {
-    const expiry = new Date(f.expiryDate)
-    const expiryDay = new Date(expiry.getFullYear(), expiry.getMonth(), expiry.getDate())
-    const diff = Math.ceil((expiryDay - todayDate) / (1000 * 60 * 60 * 24))
-    if (diff < 0) expiredCount++
-    else if (diff <= 3) expiringCount++
+    const remaining = daysUntilExpiry(f.expiryDate)
+    if (remaining < 0) expiredCount++
+    else if (remaining <= 3) expiringCount++
     else freshCount++
   })
 
@@ -240,40 +228,28 @@ function getOverview() {
 
 /**
  * 获取需要今日处理的食材（今日过期 + 已过期未处理）
- * @returns {Array}
+ * @returns {Array} 需要当天处理的活跃食材列表
  */
 function getTodayTasks() {
-  const today = getDateOffset(0)
   const foods = getAllFoods().filter(f => f.status !== 'used')
   return foods.filter(f => {
-    const expiry = new Date(f.expiryDate)
-    const todayDate = new Date()
-    const todayDay = new Date(todayDate.getFullYear(), todayDate.getMonth(), todayDate.getDate())
-    const expiryDay = new Date(expiry.getFullYear(), expiry.getMonth(), expiry.getDate())
-    const diff = Math.ceil((expiryDay - todayDay) / (1000 * 60 * 60 * 24))
-    return diff <= 1 // 今日及之前过期的
+    const remaining = daysUntilExpiry(f.expiryDate)
+    return remaining <= 1 // 今日及之前过期的
   })
 }
 
 /**
  * 获取分级过期预警（智能分级 + 处理建议）
  * @returns {{ today: Array, tomorrow: Array, threeDay: Array, sevenDay: Array, expired: Array }}
+ *   每个食材对象额外包含 daysLeft 和 suggestion 字段
  */
 function getTieredExpiryAlerts() {
   const foods = getAllFoods().filter(f => f.status !== 'used')
-  const now = new Date()
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
-
-  const daysLeft = (expiryDate) => {
-    const e = new Date(expiryDate)
-    const ed = new Date(e.getFullYear(), e.getMonth(), e.getDate())
-    return Math.ceil((ed - today) / (1000 * 60 * 60 * 24))
-  }
 
   const enriched = foods.map(f => ({
     ...f,
-    daysLeft: daysLeft(f.expiryDate),
-    suggestion: getSuggestion(daysLeft(f.expiryDate), f.category)
+    daysLeft: daysUntilExpiry(f.expiryDate),
+    suggestion: getSuggestion(daysUntilExpiry(f.expiryDate), f.category)
   }))
 
   return {
@@ -337,14 +313,10 @@ function batchMarkAsUsed(ids) {
  */
 function batchDeleteExpired() {
   const foods = getAllFoods()
-  const now = new Date()
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
 
   const remaining = foods.filter(f => {
     if (f.status === 'used') return true
-    const expiry = new Date(f.expiryDate)
-    const expiryDay = new Date(expiry.getFullYear(), expiry.getMonth(), expiry.getDate())
-    return expiryDay >= today
+    return !isExpired(f.expiryDate)
   })
 
   const deletedCount = foods.length - remaining.length
@@ -357,12 +329,11 @@ function batchDeleteExpired() {
 
 /**
  * 获取即将过期食材的统计摘要
- * @returns {object} 各等级数量 + 总浪费预估
+ * @returns {object} 各等级数量（todayCount, soonCount, weekCount, expiredCount）、
+ *   总需关注数（totalNeedAttention）和浪费预估（wastedValueEstimate）
  */
 function getExpirySummary() {
   const foods = getAllFoods().filter(f => f.status !== 'used')
-  const now = new Date()
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
 
   let todayCount = 0
   let soonCount = 0
@@ -371,16 +342,14 @@ function getExpirySummary() {
   let wastedValueEstimate = 0
 
   foods.forEach(f => {
-    const expiry = new Date(f.expiryDate)
-    const expiryDay = new Date(expiry.getFullYear(), expiry.getMonth(), expiry.getDate())
-    const diff = Math.ceil((expiryDay - today) / (1000 * 60 * 60 * 24))
+    const remaining = daysUntilExpiry(f.expiryDate)
 
-    if (diff < 0) {
+    if (remaining < 0) {
       expiredCount++
       wastedValueEstimate += 15 // mock 平均浪费价值
-    } else if (diff === 0) todayCount++
-    else if (diff <= 3) soonCount++
-    else if (diff <= 7) weekCount++
+    } else if (remaining === 0) todayCount++
+    else if (remaining <= 3) soonCount++
+    else if (remaining <= 7) weekCount++
   })
 
   return {

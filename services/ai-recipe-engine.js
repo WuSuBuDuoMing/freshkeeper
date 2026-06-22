@@ -5,9 +5,10 @@
  *   mock mode for offline development. Includes recipe scoring, caching, seasonal
  *   awareness, user preference learning, and streaming support for real-time output.
  * @module services/ai-recipe-engine
- * @version 2.12.0
+ * @version 2.15.0
  */
 const storage = require('../utils/storage-utils')
+const { daysUntilExpiry, isExpiringSoon } = require('../utils/date-utils')
 
 /**
  * AI engine configuration.
@@ -19,6 +20,7 @@ const storage = require('../utils/storage-utils')
  * @property {string} model - Model identifier (e.g. 'gpt-3.5-turbo')
  * @property {number} maxTokens - Maximum response tokens
  * @property {number} temperature - Sampling temperature (0-2)
+ * @property {number} cacheTTL - Recipe cache time-to-live in milliseconds (default 30 min)
  */
 const AI_CONFIG = {
   useRealAPI: false, // Toggle: set to true to use a real AI API
@@ -26,12 +28,13 @@ const AI_CONFIG = {
   apiKey: '',
   model: 'gpt-3.5-turbo',
   maxTokens: 2000,
-  temperature: 0.8
+  temperature: 0.8,
+  cacheTTL: 30 * 60 * 1000
 }
 
 /**
  * 获取当前季节（用于季节性推荐）
- * @returns {'spring'|'summer'|autumn'|'winter'} 季节标识
+ * @returns {'spring'|'summer'|'autumn'|'winter'} 季节标识
  */
 function getCurrentSeason() {
   const month = new Date().getMonth() + 1
@@ -107,10 +110,9 @@ function recordUserLike(recipe) {
  */
 function buildRecipePrompt(foods, options = {}) {
   const foodList = foods.map(f => `${f.name}(${f.quantity}${f.unit})`).join('、')
-  const expiringFoods = foods.filter(f => {
-    const days = Math.ceil((new Date(f.expiryDate) - new Date()) / (1000 * 60 * 60 * 24))
-    return days >= 0 && days <= 3
-  }).map(f => f.name)
+  const expiringFoods = foods
+    .filter(f => isExpiringSoon(f.expiryDate))
+    .map(f => f.name)
 
   const season = getCurrentSeason()
   const seasonFoods = SEASONAL_INGREDIENTS[season] || []
@@ -134,7 +136,8 @@ function buildRecipePrompt(foods, options = {}) {
   prompt += '    "calories": 热量,\n'
   prompt += '    "steps": ["步骤1", "步骤2"],\n'
   prompt += '    "reason": "推荐理由",\n'
-  prompt += '    "tags": ["标签"]\n'
+  prompt += '    "tags": ["标签"],\n'
+  prompt += '    "nutritionTip": "营养小贴士"\n'
   prompt += '  }\n]\n'
 
   if (options.cuisine) prompt += `偏好菜系：${options.cuisine}\n`
@@ -408,13 +411,12 @@ function scoreRecipe(recipe, foods) {
   const difficultyMap = { '简单': 100, '中等': 70, '困难': 40 }
   const difficultyScore = difficultyMap[recipe.difficulty] || 70
 
-  // 即将过期食材加分
-  const expiringFoods = foods.filter(f => {
-    const days = Math.ceil((new Date(f.expiryDate) - new Date()) / (1000 * 60 * 60 * 24))
-    return days >= 0 && days <= 3
-  }).map(f => f.name)
+  // 即将过期食材加分（使用 date-utils 共享逻辑）
+  const expiringFoodNames = foods
+    .filter(f => isExpiringSoon(f.expiryDate))
+    .map(f => f.name)
   const usesExpiring = recipe.ingredients.some(i =>
-    expiringFoods.some(e => e.includes(i) || i.includes(e))
+    expiringFoodNames.some(e => e.includes(i) || i.includes(e))
   )
   const expiryBonus = usesExpiring ? 15 : 0
 
@@ -456,7 +458,6 @@ function scoreRecipe(recipe, foods) {
  * @private
  */
 const CACHE_KEY = 'ai_recipe_cache'
-const CACHE_TTL = 30 * 60 * 1000 // 30 minutes
 
 /**
  * Retrieve a cached recipe result by key, if still within TTL.
@@ -466,7 +467,7 @@ const CACHE_TTL = 30 * 60 * 1000 // 30 minutes
 function getCachedRecipe(cacheKey) {
   const cache = storage.get(CACHE_KEY, {})
   const item = cache[cacheKey]
-  if (item && Date.now() - item.timestamp < CACHE_TTL) {
+  if (item && Date.now() - item.timestamp < AI_CONFIG.cacheTTL) {
     return item.data
   }
   return null
@@ -481,8 +482,9 @@ function setCachedRecipe(cacheKey, data) {
   const cache = storage.get(CACHE_KEY, {})
   cache[cacheKey] = { data, timestamp: Date.now() }
   // 清理过期缓存
+  const now = Date.now()
   Object.keys(cache).forEach(key => {
-    if (Date.now() - cache[key].timestamp > CACHE_TTL) delete cache[key]
+    if (now - cache[key].timestamp > AI_CONFIG.cacheTTL) delete cache[key]
   })
   storage.set(CACHE_KEY, cache)
 }
@@ -503,7 +505,7 @@ function generateCacheKey(foods, options) {
  * 主入口：根据冰箱食材生成菜谱
  * @param {Array} foods 冰箱食材列表
  * @param {object} options 选项（cuisine, maxTime, calorieLimit）
- * @returns {Promise<Array>}
+ * @returns {Promise<Array>} 按综合评分降序排列的菜谱列表
  */
 async function generateRecipes(foods, options = {}) {
   // 检查缓存
@@ -513,9 +515,16 @@ async function generateRecipes(foods, options = {}) {
     return cached
   }
 
-  // 构建 prompt 并调用 AI
+  // 构建 prompt 并调用 AI（带错误回退）
   const prompt = buildRecipePrompt(foods, options)
-  const recipes = await callAIAPI(prompt)
+  let recipes
+  try {
+    recipes = await callAIAPI(prompt)
+  } catch (err) {
+    // AI 调用失败时降级到 mock 数据
+    console.warn('[ai-recipe-engine] API 调用失败，使用 mock 数据:', err.message)
+    recipes = generateMockRecipes(prompt)
+  }
 
   // 评分并排序
   const scored = recipes.map(r => scoreRecipe(r, foods))

@@ -4,7 +4,7 @@
  *   for the FreshKeeper application. Handles expiry date calculations, relative time
  *   display, week date generation, and locale-aware Chinese date formatting.
  * @module utils/date-utils
- * @version 2.12.0
+ * @version 2.15.0
  */
 
 /**

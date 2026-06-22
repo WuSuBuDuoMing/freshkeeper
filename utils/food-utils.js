@@ -4,7 +4,7 @@
  *   enumerations, food status calculation, grouping, searching, sorting, and
  *   emoji/icon mappings for the FreshKeeper application.
  * @module utils/food-utils
- * @version 2.12.0
+ * @version 2.15.0
  */
 
 /**
