@@ -1,10 +1,10 @@
 /**
  * @file Statistics & Analytics Service
  * @description Provides data analysis, category distribution, expiry trends,
- *   waste tracking, savings tips, and monthly reports for fridge management
- *   insights. Uses mock data for demonstration purposes.
+ *   waste tracking, savings tips, monthly reports, and enhanced data visualization
+ *   for fridge management insights. Uses mock data for demonstration purposes.
  * @module services/stats-service
- * @version 2.9.0
+ * @version 2.12.0
  */
 const storage = require('../utils/storage-utils')
 const { randomInt, getDateOffset } = require('../utils/mock-utils')
@@ -142,6 +142,80 @@ function getMonthlyReport() {
 }
 
 /**
+ * 获取库存趋势数据（最近 7 天每日库存变化）
+ * @returns {Array<{date: string, label: string, added: number, removed: number, total: number}>}
+ */
+function getInventoryTrend() {
+  const result = []
+  let runningTotal = 50
+  for (let i = 6; i >= 0; i--) {
+    const date = getDateOffset(-i)
+    const d = new Date(date)
+    const added = randomInt(2, 8)
+    const removed = randomInt(1, 6)
+    runningTotal = Math.max(20, runningTotal + added - removed)
+    result.push({
+      date,
+      label: `${d.getMonth() + 1}/${d.getDate()}`,
+      added,
+      removed,
+      total: runningTotal
+    })
+  }
+  return result
+}
+
+/**
+ * 获取各存放区域库存占比
+ * @returns {Array<{name: string, value: number, color: string, icon: string}>}
+ */
+function getStorageAreaDistribution() {
+  return [
+    { name: '冷藏区', value: 18, color: '#2196F3', icon: '❄️' },
+    { name: '冷冻区', value: 12, color: '#00BCD4', icon: '🧊' },
+    { name: '保鲜区', value: 10, color: '#4CAF50', icon: '🌱' },
+    { name: '常温区', value: 20, color: '#FF9800', icon: '☀️' }
+  ]
+}
+
+/**
+ * 获取浪费趋势（最近 7 天）
+ * @returns {Array<{date: string, label: string, wastedCount: number, wastedValue: number}>}
+ */
+function getWasteTrend() {
+  const result = []
+  for (let i = 6; i >= 0; i--) {
+    const date = getDateOffset(-i)
+    const d = new Date(date)
+    const count = randomInt(0, 3)
+    result.push({
+      date,
+      label: `${d.getMonth() + 1}/${d.getDate()}`,
+      wastedCount: count,
+      wastedValue: count * randomInt(8, 20)
+    })
+  }
+  return result
+}
+
+/**
+ * 获取分类健康度评分（0-100，越高越好）
+ * @returns {Array<{category: string, score: number, freshnessRate: number, icon: string}>}
+ */
+function getCategoryHealthScore() {
+  return [
+    { category: '蔬菜', score: 78, freshnessRate: 0.78, icon: '🥬' },
+    { category: '水果', score: 65, freshnessRate: 0.65, icon: '🍎' },
+    { category: '肉类', score: 82, freshnessRate: 0.82, icon: '🥩' },
+    { category: '海鲜', score: 55, freshnessRate: 0.55, icon: '🦐' },
+    { category: '蛋奶', score: 90, freshnessRate: 0.90, icon: '🥚' },
+    { category: '饮料', score: 95, freshnessRate: 0.95, icon: '🥤' },
+    { category: '调料', score: 98, freshnessRate: 0.98, icon: '🧂' },
+    { category: '主食', score: 72, freshnessRate: 0.72, icon: '🍚' }
+  ]
+}
+
+/**
  * 生成 14 天统计 mock 数据
  */
 function generateMockStats() {
@@ -168,5 +242,9 @@ module.exports = {
   getWasteStats,
   getMostPurchased,
   getSavingTips,
-  getMonthlyReport
+  getMonthlyReport,
+  getInventoryTrend,
+  getStorageAreaDistribution,
+  getWasteTrend,
+  getCategoryHealthScore
 }
